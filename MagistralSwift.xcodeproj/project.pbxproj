@@ -8,8 +8,36 @@
 
 /* Begin PBXBuildFile section */
 		400BE2FA1D51055C00862EEC /* MagistralSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 400BE2F91D51055C00862EEC /* MagistralSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		400BE3011D51055C00862EEC /* MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE2F61D51055C00862EEC /* MagistralSwift.framework */; };
 		400BE3061D51055C00862EEC /* MagistralSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3051D51055C00862EEC /* MagistralSwiftTests.swift */; };
+		400BE3111D51058200862EEC /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 400BE3101D51058200862EEC /* Cartfile */; };
+		400BE3131D51058A00862EEC /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 400BE3121D51058A00862EEC /* Podfile */; };
+		400BE3211D5105A800862EEC /* pub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3141D5105A800862EEC /* pub.swift */; };
+		400BE3221D5105A800862EEC /* data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3151D5105A800862EEC /* data.swift */; };
+		400BE3231D5105A800862EEC /* interfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3161D5105A800862EEC /* interfaces.swift */; };
+		400BE3241D5105A800862EEC /* io.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3171D5105A800862EEC /* io.swift */; };
+		400BE3251D5105A800862EEC /* ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 400BE3181D5105A800862EEC /* ios.h */; };
+		400BE3261D5105A800862EEC /* JsonConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3191D5105A800862EEC /* JsonConverter.swift */; };
+		400BE3271D5105A800862EEC /* Magistral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE31A1D5105A800862EEC /* Magistral.swift */; };
+		400BE3281D5105A800862EEC /* MagistralException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE31B1D5105A800862EEC /* MagistralException.swift */; };
+		400BE3291D5105A800862EEC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE31C1D5105A800862EEC /* Message.swift */; };
+		400BE32C1D5105A800862EEC /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE31F1D5105A800862EEC /* RestApiManager.swift */; };
+		400BE32D1D5105A800862EEC /* sub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3201D5105A800862EEC /* sub.swift */; };
+		400BE3341D5107D300862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
+		400BE3351D5107D300862EEC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */; };
+		400BE3361D5107D300862EEC /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3301D5107D300862EEC /* CocoaMQTT.framework */; };
+		400BE3371D5107D300862EEC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3311D5107D300862EEC /* CryptoSwift.framework */; };
+		400BE3381D5107D300862EEC /* MSWeakTimer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3321D5107D300862EEC /* MSWeakTimer.framework */; };
+		400BE3391D5107D300862EEC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3331D5107D300862EEC /* SwiftyJSON.framework */; };
+		400BE33A1D5107E600862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
+		400BE33B1D5107E600862EEC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */; };
+		400BE33C1D5107E600862EEC /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3301D5107D300862EEC /* CocoaMQTT.framework */; };
+		400BE33D1D5107E600862EEC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3311D5107D300862EEC /* CryptoSwift.framework */; };
+		400BE33E1D5107E600862EEC /* MSWeakTimer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3321D5107D300862EEC /* MSWeakTimer.framework */; };
+		400BE33F1D5107E600862EEC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3331D5107D300862EEC /* SwiftyJSON.framework */; };
+		40259EEA1D51CCED004F711F /* perm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40259EE91D51CCED004F711F /* perm.swift */; };
+		40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFE6FE1D5217DB0078C8E5 /* topics.swift */; };
+		40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D82CC41D547DE20094EE2D /* MqttClient.swift */; };
+		40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE2F61D51055C00862EEC /* MagistralSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +57,30 @@
 		400BE3001D51055C00862EEC /* MagistralSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MagistralSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		400BE3051D51055C00862EEC /* MagistralSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagistralSwiftTests.swift; sourceTree = "<group>"; };
 		400BE3071D51055C00862EEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		400BE3101D51058200862EEC /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		400BE3121D51058A00862EEC /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		400BE3141D5105A800862EEC /* pub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = pub.swift; sourceTree = "<group>"; };
+		400BE3151D5105A800862EEC /* data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = data.swift; sourceTree = "<group>"; };
+		400BE3161D5105A800862EEC /* interfaces.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = interfaces.swift; sourceTree = "<group>"; };
+		400BE3171D5105A800862EEC /* io.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = io.swift; sourceTree = "<group>"; };
+		400BE3181D5105A800862EEC /* ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ios.h; sourceTree = "<group>"; };
+		400BE3191D5105A800862EEC /* JsonConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonConverter.swift; sourceTree = "<group>"; };
+		400BE31A1D5105A800862EEC /* Magistral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Magistral.swift; sourceTree = "<group>"; };
+		400BE31B1D5105A800862EEC /* MagistralException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagistralException.swift; sourceTree = "<group>"; };
+		400BE31C1D5105A800862EEC /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		400BE31F1D5105A800862EEC /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
+		400BE3201D5105A800862EEC /* sub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sub.swift; sourceTree = "<group>"; };
+		400BE32E1D5107D300862EEC /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
+		400BE3301D5107D300862EEC /* CocoaMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMQTT.framework; path = Carthage/Build/iOS/CocoaMQTT.framework; sourceTree = "<group>"; };
+		400BE3311D5107D300862EEC /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
+		400BE3321D5107D300862EEC /* MSWeakTimer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSWeakTimer.framework; path = Carthage/Build/iOS/MSWeakTimer.framework; sourceTree = "<group>"; };
+		400BE3331D5107D300862EEC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		40259EE91D51CCED004F711F /* perm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = perm.swift; sourceTree = "<group>"; };
+		40BFE6FE1D5217DB0078C8E5 /* topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topics.swift; sourceTree = "<group>"; };
+		40D82CC41D547DE20094EE2D /* MqttClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
+		52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
+		6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +88,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				400BE3341D5107D300862EEC /* Alamofire.framework in Frameworks */,
+				400BE3351D5107D300862EEC /* CocoaAsyncSocket.framework in Frameworks */,
+				400BE3361D5107D300862EEC /* CocoaMQTT.framework in Frameworks */,
+				400BE3371D5107D300862EEC /* CryptoSwift.framework in Frameworks */,
+				400BE3381D5107D300862EEC /* MSWeakTimer.framework in Frameworks */,
+				400BE3391D5107D300862EEC /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,19 +101,42 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				400BE3011D51055C00862EEC /* MagistralSwift.framework in Frameworks */,
+				40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */,
+				400BE33A1D5107E600862EEC /* Alamofire.framework in Frameworks */,
+				400BE33B1D5107E600862EEC /* CocoaAsyncSocket.framework in Frameworks */,
+				400BE33C1D5107E600862EEC /* CocoaMQTT.framework in Frameworks */,
+				400BE33D1D5107E600862EEC /* CryptoSwift.framework in Frameworks */,
+				400BE33E1D5107E600862EEC /* MSWeakTimer.framework in Frameworks */,
+				400BE33F1D5107E600862EEC /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0BE48C7034C003E48D8BB1A5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				400BE32E1D5107D300862EEC /* Alamofire.framework */,
+				400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */,
+				400BE3301D5107D300862EEC /* CocoaMQTT.framework */,
+				400BE3311D5107D300862EEC /* CryptoSwift.framework */,
+				400BE3321D5107D300862EEC /* MSWeakTimer.framework */,
+				400BE3331D5107D300862EEC /* SwiftyJSON.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		400BE2EC1D51055C00862EEC = {
 			isa = PBXGroup;
 			children = (
+				400BE3101D51058200862EEC /* Cartfile */,
+				400BE3121D51058A00862EEC /* Podfile */,
 				400BE2F81D51055C00862EEC /* MagistralSwift */,
 				400BE3041D51055C00862EEC /* MagistralSwiftTests */,
 				400BE2F71D51055C00862EEC /* Products */,
+				DE6101276D3C7CF09191120D /* Pods */,
+				0BE48C7034C003E48D8BB1A5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +152,15 @@
 		400BE2F81D51055C00862EEC /* MagistralSwift */ = {
 			isa = PBXGroup;
 			children = (
+				400BE3481D510A8400862EEC /* io.magistral */,
+				400BE3471D510A4800862EEC /* io.magistral.client */,
+				400BE3451D510A1700862EEC /* io.magistral.client.topics */,
+				400BE3441D5109F700862EEC /* io.magistral.client.util */,
+				400BE3431D5109DD00862EEC /* io.magistral.client.data */,
+				40259EE81D51CCC8004F711F /* io.magistral.client.perm */,
+				400BE3421D5109C200862EEC /* io.magistral.client.pub */,
+				400BE3461D510A2900862EEC /* io.magistral.client.sub */,
+				400BE3181D5105A800862EEC /* ios.h */,
 				400BE2F91D51055C00862EEC /* MagistralSwift.h */,
 				400BE2FB1D51055C00862EEC /* Info.plist */,
 			);
@@ -86,6 +176,84 @@
 			path = MagistralSwiftTests;
 			sourceTree = "<group>";
 		};
+		400BE3421D5109C200862EEC /* io.magistral.client.pub */ = {
+			isa = PBXGroup;
+			children = (
+				400BE3141D5105A800862EEC /* pub.swift */,
+			);
+			name = io.magistral.client.pub;
+			sourceTree = "<group>";
+		};
+		400BE3431D5109DD00862EEC /* io.magistral.client.data */ = {
+			isa = PBXGroup;
+			children = (
+				400BE3151D5105A800862EEC /* data.swift */,
+			);
+			name = io.magistral.client.data;
+			sourceTree = "<group>";
+		};
+		400BE3441D5109F700862EEC /* io.magistral.client.util */ = {
+			isa = PBXGroup;
+			children = (
+				400BE3191D5105A800862EEC /* JsonConverter.swift */,
+				400BE31F1D5105A800862EEC /* RestApiManager.swift */,
+				40D82CC41D547DE20094EE2D /* MqttClient.swift */,
+			);
+			name = io.magistral.client.util;
+			sourceTree = "<group>";
+		};
+		400BE3451D510A1700862EEC /* io.magistral.client.topics */ = {
+			isa = PBXGroup;
+			children = (
+				40BFE6FE1D5217DB0078C8E5 /* topics.swift */,
+			);
+			name = io.magistral.client.topics;
+			sourceTree = "<group>";
+		};
+		400BE3461D510A2900862EEC /* io.magistral.client.sub */ = {
+			isa = PBXGroup;
+			children = (
+				400BE3201D5105A800862EEC /* sub.swift */,
+			);
+			name = io.magistral.client.sub;
+			sourceTree = "<group>";
+		};
+		400BE3471D510A4800862EEC /* io.magistral.client */ = {
+			isa = PBXGroup;
+			children = (
+				400BE3171D5105A800862EEC /* io.swift */,
+				400BE3161D5105A800862EEC /* interfaces.swift */,
+				400BE31A1D5105A800862EEC /* Magistral.swift */,
+				400BE31B1D5105A800862EEC /* MagistralException.swift */,
+			);
+			name = io.magistral.client;
+			sourceTree = "<group>";
+		};
+		400BE3481D510A8400862EEC /* io.magistral */ = {
+			isa = PBXGroup;
+			children = (
+				400BE31C1D5105A800862EEC /* Message.swift */,
+			);
+			name = io.magistral;
+			sourceTree = "<group>";
+		};
+		40259EE81D51CCC8004F711F /* io.magistral.client.perm */ = {
+			isa = PBXGroup;
+			children = (
+				40259EE91D51CCED004F711F /* perm.swift */,
+			);
+			name = io.magistral.client.perm;
+			sourceTree = "<group>";
+		};
+		DE6101276D3C7CF09191120D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */,
+				52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -93,6 +261,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				400BE3251D5105A800862EEC /* ios.h in Headers */,
 				400BE2FA1D51055C00862EEC /* MagistralSwift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,10 +273,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 400BE30A1D51055C00862EEC /* Build configuration list for PBXNativeTarget "MagistralSwift" */;
 			buildPhases = (
+				13346BF33F9BBDA2D0D430A0 /* [CP] Check Pods Manifest.lock */,
 				400BE2F11D51055C00862EEC /* Sources */,
 				400BE2F21D51055C00862EEC /* Frameworks */,
 				400BE2F31D51055C00862EEC /* Headers */,
 				400BE2F41D51055C00862EEC /* Resources */,
+				740C7CB674C91101797D5530 /* [CP] Copy Pods Resources */,
+				400BE3401D51087D00862EEC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -125,6 +297,7 @@
 				400BE2FC1D51055C00862EEC /* Sources */,
 				400BE2FD1D51055C00862EEC /* Frameworks */,
 				400BE2FE1D51055C00862EEC /* Resources */,
+				400BE3411D51090C00862EEC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -177,6 +350,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				400BE3131D51058A00862EEC /* Podfile in Resources */,
+				400BE3111D51058200862EEC /* Cartfile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,11 +364,95 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		13346BF33F9BBDA2D0D430A0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		400BE3401D51087D00862EEC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CryptoSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MSWeakTimer.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		400BE3411D51090C00862EEC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CryptoSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MSWeakTimer.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		740C7CB674C91101797D5530 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		400BE2F11D51055C00862EEC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40259EEA1D51CCED004F711F /* perm.swift in Sources */,
+				400BE3281D5105A800862EEC /* MagistralException.swift in Sources */,
+				400BE3211D5105A800862EEC /* pub.swift in Sources */,
+				400BE3261D5105A800862EEC /* JsonConverter.swift in Sources */,
+				400BE3271D5105A800862EEC /* Magistral.swift in Sources */,
+				400BE3221D5105A800862EEC /* data.swift in Sources */,
+				400BE3291D5105A800862EEC /* Message.swift in Sources */,
+				400BE3231D5105A800862EEC /* interfaces.swift in Sources */,
+				400BE32C1D5105A800862EEC /* RestApiManager.swift in Sources */,
+				40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */,
+				400BE32D1D5105A800862EEC /* sub.swift in Sources */,
+				400BE3241D5105A800862EEC /* io.swift in Sources */,
+				40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,27 +568,40 @@
 		};
 		400BE30B1D51055C00862EEC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = MagistralSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		400BE30C1D51055C00862EEC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = MagistralSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -342,6 +614,10 @@
 		400BE30E1D51055C00862EEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = MagistralSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwiftTests;
@@ -352,6 +628,10 @@
 		400BE30F1D51055C00862EEC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = MagistralSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwiftTests;
@@ -378,6 +658,7 @@
 				400BE30C1D51055C00862EEC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		400BE30D1D51055C00862EEC /* Build configuration list for PBXNativeTarget "MagistralSwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -386,6 +667,7 @@
 				400BE30F1D51055C00862EEC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

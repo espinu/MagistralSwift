@@ -1,0 +1,6 @@
+github "robbiehanson/CocoaAsyncSocket" "master"
+github "CrazyWisdom/MSWeakTimer" "master"
+github "emqtt/CocoaMQTT" "master"
+github "SwiftyJSON/SwiftyJSON" "master"
+github "Alamofire/Alamofire" "master"
+github "krzyzanowskim/CryptoSwift" "master"
