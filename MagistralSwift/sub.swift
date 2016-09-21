@@ -12,10 +12,10 @@ public extension io.magistral.client.sub {
     
     public struct SubMeta {
         
-        private var _endPoints: [ String ]
-        private var _group: String;
-        private var _topic: String;
-        private var _channel: Int;
+        fileprivate var _endPoints: [ String ]
+        fileprivate var _group: String;
+        fileprivate var _topic: String;
+        fileprivate var _channel: Int;
         
         init(topic : String, channel : Int, group: String, endPoints: [String]) {
             self._topic = topic;

@@ -12,8 +12,8 @@ public extension io.magistral.client.topics {
     
     struct TopicMeta {
         
-        private var _topic: String;
-        private var _channels: Set<Int>;
+        fileprivate var _topic: String;
+        fileprivate var _channels: Set<Int>;
         
         init(topic : String, channels : Set<Int>) {
             self._topic = topic;

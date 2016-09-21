@@ -1,9 +1,9 @@
 use_frameworks!
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'MagistralSwift' do
-    pod 'CocoaMQTT'
-    pod 'SwiftyJSON'
+    pod 'SwiftMQTT'
     pod 'CryptoSwift'
-    pod 'Alamofire', '~> 3.1.2'
+    pod 'Alamofire', '~> 4.0.0'
+    pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
 end

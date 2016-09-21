@@ -22,17 +22,17 @@ public class JsonConverter {
             let dumb = Message(topic: "", channel: 0, msg: [UInt8](), index: 0, timestamp: 0)
             
             let count = messages.count;
-            var msgL = [Message](count : count, repeatedValue: dumb);
+            var msgL = [Message](repeating: dumb, count : count);
             
             for i in 0 ... (count - 1) {
-                msgL[i] = convert2msg(messages[i]);
+                msgL[i] = convert2msg(json: messages[i]);
             }
             
             history = io.magistral.client.data.History(messages: msgL);
         } else if (json["message"]["topic"].string != nil) {            
-            history = io.magistral.client.data.History(messages: [ convert2msg(json["message"]) ]);
+            history = io.magistral.client.data.History(messages: [ convert2msg(json: json["message"]) ]);
         } else {
-            throw MagistralException.HistoryInvocationError
+            throw MagistralException.historyInvocationError
         }        
         return history;
     }
@@ -61,11 +61,11 @@ public class JsonConverter {
             let count = perms.count;
             
             for i in 0 ... (count - 1) {
-                ps.append(handlePerm(perms[i]));
+                ps.append(handlePerm(perm: perms[i]));
             }
             
         } else if (json["permission"]["topic"].string != nil) {
-            ps.append(handlePerm(json["permission"]))
+            ps.append(handlePerm(perm: json["permission"]))
         }
         
         return ps;
@@ -78,8 +78,8 @@ public class JsonConverter {
         let index = json["index"].uInt64Value
         let ts = json["timestamp"].uInt64Value
         
-        let nsdata = NSData(base64EncodedString: sb, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters)!
-        var bytes : [UInt8] = [UInt8](count: nsdata.length, repeatedValue: 0)
+        let nsdata = NSData(base64Encoded: sb, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters)!
+        var bytes : [UInt8] = [UInt8](repeating: 0, count: nsdata.length)
         
         nsdata.getBytes(&bytes, length: nsdata.length)
         
@@ -95,10 +95,10 @@ public class JsonConverter {
             let count = msgs.count;
             
             for i in 0 ... (count - 1) {
-                messages.append(convert2msg(msgs[i]));
+                messages.append(convert2msg(json: msgs[i]));
             }
         } else if (json["message"]["topic"].string != nil) {
-            messages.append(convert2msg(json["message"]));
+            messages.append(convert2msg(json: json["message"]));
         }
         
         return messages;
@@ -122,11 +122,11 @@ public class JsonConverter {
         if (json.array != nil) {
             print("token = " + json[0]["token"].stringValue)
             
-            if (json[0]["consumer"]) { subCnf["bootstrap.servers"] = json[0]["consumer"].stringValue }
-            if (json[0]["producer"]) { pubCnf["bootstrap.servers"] = json[0]["producer"].stringValue }
+            if (json[0]["consumer"]).boolValue { subCnf["bootstrap.servers"] = json[0]["consumer"].stringValue }
+            if (json[0]["producer"]).boolValue { pubCnf["bootstrap.servers"] = json[0]["producer"].stringValue }
             
-            if (json[0]["consumer-ssl"]) { subCnf["bootstrap.servers.ssl"] = json[0]["consumer-ssl"].stringValue }
-            if (json[0]["producer-ssl"]) { pubCnf["bootstrap.servers.ssl"] = json[0]["producer-ssl"].stringValue }
+            if (json[0]["consumer-ssl"]).boolValue { subCnf["bootstrap.servers.ssl"] = json[0]["consumer-ssl"].stringValue }
+            if (json[0]["producer-ssl"]).boolValue { pubCnf["bootstrap.servers.ssl"] = json[0]["producer-ssl"].stringValue }
         }
         
         config["pub"]  = [pubCnf];

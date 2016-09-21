@@ -12,7 +12,7 @@ public extension io.magistral.client.data {
     
     public struct History {
         
-        private var _messages: [Message];
+        fileprivate var _messages: [Message];
         
         init(messages : [Message]) {
             self._messages = messages;

@@ -10,11 +10,11 @@ import Foundation
 
 public struct Message {
     
-    private var _topic : String;
-    private var _channel : Int;
-    private var _body : [UInt8];
-    private var _index : UInt64;
-    private var _timestamp : UInt64;
+    fileprivate var _topic : String;
+    fileprivate var _channel : Int;
+    fileprivate var _body : [UInt8];
+    fileprivate var _index : UInt64;
+    fileprivate var _timestamp : UInt64;
     
     init(topic: String, channel: Int, msg: [UInt8], index: UInt64, timestamp: UInt64) {
         self._topic = topic;

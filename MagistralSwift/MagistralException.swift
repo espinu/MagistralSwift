@@ -8,23 +8,27 @@
 
 import Foundation
 
-public enum MagistralException: ErrorType {
-    case Default(msg: String)
+public enum MagistralException: Error {
     
-    case None
+    case `default`(msg: String)
+    case none
     
-    case MqttConnectionError
+    case mqttConnectionError
     
-    case ConversionError
+    case conversionError
     
-    case HistoryInvocationError
-    case FetchTopicsError
+    case publishError
+    case subscriptionError
+    case unsubscriptionError
     
-    case PermissionFetchError
-    case PermissionGrantError
-    case PermissionRevokationError
+    case historyInvocationError
+    case fetchTopicsError
     
-    case InvalidPubKey
-    case InvalidSubKey
-    case InvalidSecretKey
+    case permissionFetchError
+    case permissionGrantError
+    case permissionRevokationError
+    
+    case invalidPubKey
+    case invalidSubKey
+    case invalidSecretKey
 }

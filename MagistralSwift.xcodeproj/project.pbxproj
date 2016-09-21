@@ -23,21 +23,18 @@
 		400BE32C1D5105A800862EEC /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE31F1D5105A800862EEC /* RestApiManager.swift */; };
 		400BE32D1D5105A800862EEC /* sub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3201D5105A800862EEC /* sub.swift */; };
 		400BE3341D5107D300862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
-		400BE3351D5107D300862EEC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */; };
-		400BE3361D5107D300862EEC /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3301D5107D300862EEC /* CocoaMQTT.framework */; };
 		400BE3371D5107D300862EEC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3311D5107D300862EEC /* CryptoSwift.framework */; };
-		400BE3381D5107D300862EEC /* MSWeakTimer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3321D5107D300862EEC /* MSWeakTimer.framework */; };
-		400BE3391D5107D300862EEC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3331D5107D300862EEC /* SwiftyJSON.framework */; };
 		400BE33A1D5107E600862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
-		400BE33B1D5107E600862EEC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */; };
-		400BE33C1D5107E600862EEC /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3301D5107D300862EEC /* CocoaMQTT.framework */; };
 		400BE33D1D5107E600862EEC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3311D5107D300862EEC /* CryptoSwift.framework */; };
-		400BE33E1D5107E600862EEC /* MSWeakTimer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3321D5107D300862EEC /* MSWeakTimer.framework */; };
-		400BE33F1D5107E600862EEC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3331D5107D300862EEC /* SwiftyJSON.framework */; };
+		40137B601D912DFE00A88D6B /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
 		40259EEA1D51CCED004F711F /* perm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40259EE91D51CCED004F711F /* perm.swift */; };
+		405600B91D90ACE000A57037 /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
+		405600BD1D90AF1400A57037 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405600BC1D90AF1400A57037 /* main.swift */; };
+		406F25861D91735200F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
+		406F25871D91739800F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
 		40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFE6FE1D5217DB0078C8E5 /* topics.swift */; };
 		40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D82CC41D547DE20094EE2D /* MqttClient.swift */; };
-		40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE2F61D51055C00862EEC /* MagistralSwift.framework */; };
+		40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE2F61D51055C00862EEC /* MagistralSwift.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,12 +68,11 @@
 		400BE31F1D5105A800862EEC /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		400BE3201D5105A800862EEC /* sub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sub.swift; sourceTree = "<group>"; };
 		400BE32E1D5107D300862EEC /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
-		400BE3301D5107D300862EEC /* CocoaMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMQTT.framework; path = Carthage/Build/iOS/CocoaMQTT.framework; sourceTree = "<group>"; };
 		400BE3311D5107D300862EEC /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
-		400BE3321D5107D300862EEC /* MSWeakTimer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSWeakTimer.framework; path = Carthage/Build/iOS/MSWeakTimer.framework; sourceTree = "<group>"; };
-		400BE3331D5107D300862EEC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		40259EE91D51CCED004F711F /* perm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = perm.swift; sourceTree = "<group>"; };
+		405600B81D90ACE000A57037 /* SwiftMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftMQTT.framework; path = Carthage/Build/iOS/SwiftMQTT.framework; sourceTree = "<group>"; };
+		405600BC1D90AF1400A57037 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		406F25851D91735200F4D65F /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		40BFE6FE1D5217DB0078C8E5 /* topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topics.swift; sourceTree = "<group>"; };
 		40D82CC41D547DE20094EE2D /* MqttClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
 		52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
@@ -89,11 +85,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				400BE3341D5107D300862EEC /* Alamofire.framework in Frameworks */,
-				400BE3351D5107D300862EEC /* CocoaAsyncSocket.framework in Frameworks */,
-				400BE3361D5107D300862EEC /* CocoaMQTT.framework in Frameworks */,
+				405600B91D90ACE000A57037 /* SwiftMQTT.framework in Frameworks */,
 				400BE3371D5107D300862EEC /* CryptoSwift.framework in Frameworks */,
-				400BE3381D5107D300862EEC /* MSWeakTimer.framework in Frameworks */,
-				400BE3391D5107D300862EEC /* SwiftyJSON.framework in Frameworks */,
+				406F25861D91735200F4D65F /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,13 +95,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40137B601D912DFE00A88D6B /* SwiftMQTT.framework in Frameworks */,
 				40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */,
 				400BE33A1D5107E600862EEC /* Alamofire.framework in Frameworks */,
-				400BE33B1D5107E600862EEC /* CocoaAsyncSocket.framework in Frameworks */,
-				400BE33C1D5107E600862EEC /* CocoaMQTT.framework in Frameworks */,
+				406F25871D91739800F4D65F /* SwiftyJSON.framework in Frameworks */,
 				400BE33D1D5107E600862EEC /* CryptoSwift.framework in Frameworks */,
-				400BE33E1D5107E600862EEC /* MSWeakTimer.framework in Frameworks */,
-				400BE33F1D5107E600862EEC /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,12 +109,10 @@
 		0BE48C7034C003E48D8BB1A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				406F25851D91735200F4D65F /* SwiftyJSON.framework */,
+				405600B81D90ACE000A57037 /* SwiftMQTT.framework */,
 				400BE32E1D5107D300862EEC /* Alamofire.framework */,
-				400BE32F1D5107D300862EEC /* CocoaAsyncSocket.framework */,
-				400BE3301D5107D300862EEC /* CocoaMQTT.framework */,
 				400BE3311D5107D300862EEC /* CryptoSwift.framework */,
-				400BE3321D5107D300862EEC /* MSWeakTimer.framework */,
-				400BE3331D5107D300862EEC /* SwiftyJSON.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -160,9 +150,10 @@
 				40259EE81D51CCC8004F711F /* io.magistral.client.perm */,
 				400BE3421D5109C200862EEC /* io.magistral.client.pub */,
 				400BE3461D510A2900862EEC /* io.magistral.client.sub */,
-				400BE3181D5105A800862EEC /* ios.h */,
 				400BE2F91D51055C00862EEC /* MagistralSwift.h */,
+				400BE3181D5105A800862EEC /* ios.h */,
 				400BE2FB1D51055C00862EEC /* Info.plist */,
+				405600BC1D90AF1400A57037 /* main.swift */,
 			);
 			path = MagistralSwift;
 			sourceTree = "<group>";
@@ -321,9 +312,14 @@
 				TargetAttributes = {
 					400BE2F51D51055C00862EEC = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 5J496Q8XJ3;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 					400BE2FF1D51055C00862EEC = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 5J496Q8XJ3;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -387,11 +383,9 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CryptoSwift.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/MSWeakTimer.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftMQTT.framework",
 			);
 			outputPaths = (
 			);
@@ -406,10 +400,8 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CryptoSwift.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/MSWeakTimer.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftMQTT.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 			);
 			outputPaths = (
@@ -448,6 +440,7 @@
 				400BE3221D5105A800862EEC /* data.swift in Sources */,
 				400BE3291D5105A800862EEC /* Message.swift in Sources */,
 				400BE3231D5105A800862EEC /* interfaces.swift in Sources */,
+				405600BD1D90AF1400A57037 /* main.swift in Sources */,
 				400BE32C1D5105A800862EEC /* RestApiManager.swift in Sources */,
 				40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */,
 				400BE32D1D5105A800862EEC /* sub.swift in Sources */,
@@ -513,7 +506,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -556,7 +549,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -570,22 +563,30 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = NO;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5J496Q8XJ3;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = MagistralSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -593,49 +594,68 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = NO;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5J496Q8XJ3;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = MagistralSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		400BE30E1D51055C00862EEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEVELOPMENT_TEAM = 5J496Q8XJ3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = MagistralSwiftTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos10.0;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		400BE30F1D51055C00862EEC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEVELOPMENT_TEAM = 5J496Q8XJ3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = MagistralSwiftTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos10.0;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

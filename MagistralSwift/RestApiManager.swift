@@ -7,31 +7,33 @@
 //
 
 import Foundation
-import SwiftyJSON
 import Alamofire
+import SwiftyJSON
 
 typealias ServiceResponse = (JSON, NSError?) -> Void
 typealias ServiceResponseText = (String, NSError?) -> Void
 
-public class RestApiManager: NSObject {
+open class RestApiManager: NSObject {
     
     enum ResponseType {
-        case JSON
-        case TEXT
+        case json
+        case text
     }
     
     static let sharedInstance = RestApiManager()
     
-    func makeHTTPGetRequest(path: String, parameters : [String : AnyObject]?, user : String, password : String, onCompletion: ServiceResponse) {
+    func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
+        
         Alamofire
-            .request(.GET, path, parameters: parameters)
+            .request(path, method: .get, parameters: parameters)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
             .validate()
             .responseJSON { response in
+               
                 guard response.result.isSuccess else {
                     print("REST CALL ERROR: \(response.result.error)")
-                    onCompletion(nil, response.result.error)
+                    onCompletion(nil, response.result.error as NSError?)
                     return
                 }
                 
@@ -40,112 +42,92 @@ public class RestApiManager: NSObject {
         }
     }
     
-    func makeHTTPGetRequestText(path: String, parameters : [String : AnyObject]?, user : String, password : String, onCompletion: ServiceResponseText) {
-        
+    func makeHTTPGetRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
         Alamofire
-            .request(.GET, path, parameters: parameters)
+            .request(path, method: .get, parameters: parameters)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
             .validate()
             .responseString { response in
-                
-            }
-    }
-    
-    func makeHTTPPutRequest(path: String, parameters : [String : AnyObject]?, user : String, password : String, onCompletion: ServiceResponse) {
-        let URL = NSURL(string: path)
-        var request = NSMutableURLRequest(URL: URL!)
-        
-        let encoding = Alamofire.ParameterEncoding.URL
-        (request, _) = encoding.encode(request, parameters: parameters)
-        
-        Alamofire
-            .request(.PUT, (request.URL?.absoluteString)!)
-            .authenticate(user: user, password: password)
-            .validate(statusCode: 200..<300)
-            .responseJSON {
-                response in
-                guard response.result.isSuccess else {
-                    print("REST CALL ERROR: \(response.result.error)")
-                    onCompletion(nil, response.result.error)
-                    return
-                }
-                
-                let json: JSON = JSON(data: response.data!);
-                onCompletion(json, nil);
-        }
-    }
-    
-    func makeHTTPDeleteRequestText(path: String, parameters : [String : AnyObject]?, user : String, password : String, onCompletion: ServiceResponseText) {
-        let URL = NSURL(string: path)
-        var request = NSMutableURLRequest(URL: URL!)
-        
-        let encoding = Alamofire.ParameterEncoding.URL
-        (request, _) = encoding.encode(request, parameters: parameters)
-        
-        Alamofire
-            .request(.DELETE, (request.URL?.absoluteString)!)
-            .authenticate(user: user, password: password)
-            .validate(statusCode: 200..<300)
-            .responseString { response in
                 switch response.result {
-                    case .Success:
+                    case .success:
                         onCompletion(response.result.value! , nil)
-                    case .Failure(let error):
-                        onCompletion("", error)
+                    case .failure(let error):
+                        onCompletion("", error as NSError?)
+                }
+            }
+    }
+    
+    func makeHTTPPutRequest(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
+        Alamofire
+            .request(path, method: .put, parameters: parameters, encoding: URLEncoding.default)
+            .authenticate(user: user, password: password)
+            .validate(statusCode: 200..<300)
+            .responseString { response in
+                switch response.result {
+                    case .success:
+                        let json: JSON = JSON(data: response.data!);
+                        onCompletion(json , nil)
+                    case .failure(let error):
+                        onCompletion("", error as NSError?)
                 }
         }
     }
     
-    func makeHTTPPutRequestText(path: String, parameters : [String : AnyObject]?, user : String, password : String, onCompletion: ServiceResponseText) {
-        
-        let URL = NSURL(string: path)
-        var request = NSMutableURLRequest(URL: URL!)
-       
-        let encoding = Alamofire.ParameterEncoding.URL
-        (request, _) = encoding.encode(request, parameters: parameters)
-        
+    func makeHTTPDeleteRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
         Alamofire
-            .request(.PUT, (request.URL?.absoluteString)!)
+            .request(path, method: .delete, parameters: parameters, encoding: URLEncoding.default)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
-            
             .responseString { response in
-                
                 switch response.result {
-                case .Success:
-                    onCompletion(response.result.value!, nil)
-                case .Failure(let error):
-                    onCompletion("", error)
+                    case .success:
+                        onCompletion(response.result.value! , nil)
+                    case .failure(let error):
+                        onCompletion("", error as NSError?)
                 }
+        }
+    }
+    
+    func makeHTTPPutRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
+        Alamofire
+            .request(path, method: .put, parameters: parameters, encoding: URLEncoding.default)
+            .authenticate(user: user, password: password)
+            .validate(statusCode: 200..<300)
+            .responseString { response in
+                switch response.result {
+                case .success:
+                    onCompletion(response.result.value! , nil)
+                case .failure(let error):
+                    onCompletion("", error as NSError?)
             }
+        }
     }
     
     // MARK: Perform a POST Request
-    func makeHTTPPostRequest(path: String, body: [String: AnyObject], onCompletion: ServiceResponse) {
-        let request = NSMutableURLRequest(URL: NSURL(string: path)!)
+    func makeHTTPPostRequest(_ path: String, body: Parameters, onCompletion: @escaping ServiceResponse) {
         
-        // Set the method to POST
-        request.HTTPMethod = "POST"
+        let url = URL(string: path)!
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
         
         do {
-            // Set the POST body for the request
-            let jsonBody = try NSJSONSerialization.dataWithJSONObject(body, options: .PrettyPrinted)
-            request.HTTPBody = jsonBody
-            let session = NSURLSession.sharedSession()
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-                if let jsonData = data {
-                    let json:JSON = JSON(data: jsonData)
-                    onCompletion(json, nil)
-                } else {
-                    onCompletion(nil, error)
-                }
-            })
-            task.resume()
+            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
         } catch {
-            // Create your personal error
-            onCompletion(nil, nil)
+            // No-op
         }
+        
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        Alamofire
+            .request(urlRequest).responseString { response in
+                switch response.result {
+                case .success:
+                    let json: JSON = JSON(data: response.data!);
+                    onCompletion(json , nil)
+                case .failure(let error):
+                    onCompletion("", error as NSError?)
+                }
+            }
     }
 }

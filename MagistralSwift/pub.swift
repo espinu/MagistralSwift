@@ -12,8 +12,8 @@ public extension io.magistral.client.pub {
     
    public struct PubMeta {
         
-        private var _topic: String;
-        private var _channel: Int;
+        fileprivate var _topic: String;
+        fileprivate var _channel: Int;
         
         init(topic : String, channel : Int) {
             self._topic = topic;

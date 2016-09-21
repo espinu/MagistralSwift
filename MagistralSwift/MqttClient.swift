@@ -7,179 +7,108 @@
 //
 
 import Foundation
-import CocoaMQTT
+import SwiftMQTT
 
-class MqttClient : CocoaMQTT, CocoaMQTTDelegate {
+class MqttClient : MQTTSession, MQTTSessionDelegate {
     
-    typealias MessageListener = (CocoaMQTT, CocoaMQTTMessage, UInt16) -> Void
-    
-    typealias ConnectionListener = (CocoaMQTT, Bool, String, Int?, NSError?) -> Void
-    typealias ConnectionAckListener = (CocoaMQTT, CocoaMQTTConnAck) -> Void
-    typealias SubscriptionListener = (CocoaMQTT, Bool, String) -> Void
-    
-    typealias PublishListener = (CocoaMQTT, CocoaMQTTMessage, UInt16) -> Void
-    typealias PublishAckListener = (CocoaMQTT, UInt16) -> Void
+    typealias MessageListener = (MQTTSession, Message) -> Void
     
     var msgListeners : [MessageListener] = [];
-    var conListeners : [ConnectionListener] = [];
-    var conAckListeners : [ConnectionAckListener] = [];
-    var subListeners : [SubscriptionListener] = [];
+
     
-    var pubListeners : [PublishListener] = [];
-    var pubAckListeners : [PublishAckListener] = [];
-    
-    func addConnectionListener(listener : ConnectionListener) {
-        conListeners.append(listener);
-    }
-    
-    private func addConnectionAckListener(listener : ConnectionAckListener) {
-        conAckListeners.append(listener);
-    }
-    
-    private func addSubscriptionListener(listener : SubscriptionListener) {
-        subListeners.append(listener);
-    }
-    
-    func addMessageListener(listener : MessageListener) {
+    func addMessageListener(_ listener : @escaping MessageListener) {
         msgListeners.append(listener);
     }
     
-    private func addPublishListener(listener : PublishListener) {
-        pubListeners.append(listener);
-    }
-    func addPublishAckListener(listener : PublishAckListener) {
-        pubAckListeners.append(listener);
-    }
-    
 //  DELETE LISTENERS
-    
-    func removeConnectionListeners() {
-        conListeners.removeAll();
-    }
-    func removeConnectionAckListeners() {
-        conAckListeners.removeAll();
-    }
-    func removeSubscriptionListeners() {
-        subListeners.removeAll();
-    }
+
     func removeMessageListeners() {
         msgListeners.removeAll();
-    }
-    func removePublishListeners() {
-        pubListeners.removeAll();
-    }
-    func removePublishAckListeners() {
-        pubAckListeners.removeAll();
     }
     
 //  Overrides
     
-    func connect(token : String, pubKey : String, callback : (Bool, String, Int, MagistralException?) -> Void) {
-        addConnectionListener { ref, status, host, port, err in
-            callback(status, host, port!, err != nil ? MagistralException.MqttConnectionError : nil)
-            
-            self.subscribe("exceptions");
-            self.publish(CocoaMQTTMessage(topic: "presence/" + pubKey + "/" + token, payload: [ 1 ], qos: CocoaMQTTQOS.QOS2, retained: true, dup: false));
+    var disconnectListener : MQTTDisconnectBlock?;
+    var socketErrorListener : MQTTSocketErrorBlock?;
+    
+    public typealias MQTTDisconnectBlock = (SwiftMQTT.MQTTSession) -> Swift.Void
+    public typealias MQTTSocketErrorBlock = (SwiftMQTT.MQTTSession) -> Swift.Void
+    
+    func connect(completion: MQTTSessionCompletionBlock?, disconnect: MQTTDisconnectBlock?, socketerr: MQTTSocketErrorBlock?) {
+        super.connect { connected, error in
+            completion?(connected, error);
+        }
+        disconnectListener = disconnect;
+        socketErrorListener = socketerr;
+    }
+    
+    func publish(_ topic : String, channel : Int, msg : [UInt8], callback : io.magistral.client.pub.Callback?) {
+        publish(Data(msg), in: topic + ":" + String(channel), delivering: .atLeastOnce, retain: false) { published, error in
+            callback?(io.magistral.client.pub.PubMeta(topic: topic, channel: channel), published ? nil : MagistralException.publishError)
         }
     }
     
-    var _pubCallbacks : [UInt16 : (io.magistral.client.pub.Callback, String, Int)] = [:]
-    func publish(topic : String, channel : Int, msg : [UInt8], callback : io.magistral.client.pub.Callback) -> UInt16 {
-        
-        let id = super.publish(CocoaMQTTMessage(topic: topic + ":" + String(channel), payload: msg, qos: CocoaMQTTQOS.QOS1, retained: false, dup: false));
-        self._pubCallbacks[id] = (callback, topic, channel);
-        return id;
-    }
-    
-    func subscribe(topic : String, channel: Int, group : String, qos: CocoaMQTTQOS, callback : io.magistral.client.sub.Callback) {
-        super.subscribe(topic + ":" + String(channel), qos: qos);
-        
-        addSubscriptionListener { (ref, status, topic) in
-            if (status) {
-                callback(io.magistral.client.sub.SubMeta(topic: topic, channel: channel, group: group, endPoints: []), nil)
-                self.removeSubscriptionListeners();
-            }
-        };        
-        
-    }
-    
-    func unsubscribe(topic : String, callback : io.magistral.client.sub.Callback) {
-        super.unsubscribe(topic)
-        
-        addSubscriptionListener { ref, status, topic in
-            if (status == false) {
-                callback(io.magistral.client.sub.SubMeta(topic: topic, channel: -1, group: "", endPoints: []), nil)
-                self.removeSubscriptionListeners();
-            }
-        };
-    }
-    
-    func unsubscribe(topic : String, channel: Int?, callback : io.magistral.client.sub.Callback) {
-        super.unsubscribe(topic + "/" + String(channel))
-        
-        addSubscriptionListener { ref, status, topic in
-            if (status == false) {
-                callback(io.magistral.client.sub.SubMeta(topic: topic, channel: channel!, group: "", endPoints: []), nil)
-                self.removeSubscriptionListeners();
-            }
-        };
-    }
-    
-//  CocoaMQTTDelegate stuff
-    
-    func mqtt(mqtt: CocoaMQTT, didConnect host: String, port: Int) {
-        
-        for l in conListeners {
-            l(mqtt, true, host, port, nil);
-        }
-    }
-    func mqtt(mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        for l in conAckListeners {
-            l(mqtt, ack)
+    func subscribe(_ topic : String, channel: Int, group : String, qos: MQTTQoS, callback : io.magistral.client.sub.Callback?) {
+        super.subscribe(to: topic + ":" + String(channel), delivering: qos) { succeeded, error -> Void in
+            callback?(io.magistral.client.sub.SubMeta(topic: topic, channel: channel, group: group, endPoints: []), succeeded ? nil : MagistralException.subscriptionError)
         }
     }
     
-    var pubacks : [UInt16] = [];
-    func mqtt(mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-        pubacks.append(id);
-    }
-    
-    func mqtt(mqtt: CocoaMQTT, didPublishAck id: UInt16) {
-        if let tuple = _pubCallbacks[id] {
-            tuple.0(io.magistral.client.pub.PubMeta(topic: tuple.1, channel: tuple.2), nil)
-            _pubCallbacks.removeValueForKey(id);
+    func unsubscribe(_ topic : String, callback : io.magistral.client.sub.Callback?) {
+        super.unSubscribe(from: topic) { succeeded, error -> Void in
+            callback?(io.magistral.client.sub.SubMeta(topic: topic, channel: -1, group: "", endPoints: []), succeeded ? nil : MagistralException.unsubscriptionError)
         }
     }
     
-    func mqtt(mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+    func unsubscribe(_ topic : String, channel: Int, callback : io.magistral.client.sub.Callback?) {
+        let sfx = "/" + String(channel);
+        super.unSubscribe(from: topic + sfx) { succeeded, error -> Void in
+            callback?(io.magistral.client.sub.SubMeta(topic: topic, channel: -1, group: "", endPoints: []), succeeded ? nil : MagistralException.unsubscriptionError)
+        }
+    }
+    
+    private func getCurrentMillis() -> Int64 {
+        return Int64(UInt64(Date().timeIntervalSince1970 * 1000))
+    }
+    
+    func mqttDidReceive(message data: Data, in topic: String, from session: SwiftMQTT.MQTTSession) {
         for l in msgListeners {
-            l(mqtt, message, id)
+            
+            var bytes = [UInt8](repeating: 0, count: data.count)
+            data.copyBytes(to: &bytes, count: data.count)
+            
+            let str = topic;
+            let index = self.bytes2long(bytes: bytes);
+            
+            let tch = str.substring(from: str.index(str.startIndex, offsetBy: 41));
+            
+            var elements = tch.components(separatedBy: "/")
+            
+            if let myNumber = NumberFormatter().number(from: elements.popLast()!) {
+                let ch = myNumber.intValue
+                let merged = elements.joined(separator: "/");
+                
+                let t = merged.components(separatedBy: "-").joined(separator: ".");
+                
+                l(session, Message(topic: t, channel: ch, msg: bytes, index: index, timestamp: UInt64(self.getCurrentMillis())))
+            }
+
         }
     }
     
-    func mqtt(mqtt: CocoaMQTT, didSubscribeTopic topic: String) {
-        for l in subListeners {
-            l(mqtt, true, topic)
-        }
+    private func bytes2long(bytes: [UInt8]) -> UInt64 {
+        var value : UInt64 = 0
+        let data = NSData(bytes: bytes, length: 8)
+        data.getBytes(&value, length: 8)
+        value = UInt64(bigEndian: value)
+        return value;
     }
     
-    func mqtt(mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
-        for l in subListeners {
-            l(mqtt, false, topic)
-        }
+    func mqttDidDisconnect(session: SwiftMQTT.MQTTSession) {
+        disconnectListener?(session)
     }
     
-    func mqttDidDisconnect(mqtt: CocoaMQTT, withError err: NSError?) {
-        for l in conListeners {
-            l(mqtt, false, host, nil, err)
-        }
-    }
-    
-    func mqttDidPing(mqtt: CocoaMQTT) {
-    
-    }
-    
-    func mqttDidReceivePong(mqtt: CocoaMQTT) {
-       
+    func mqttSocketErrorOccurred(session: SwiftMQTT.MQTTSession) {
+        socketErrorListener?(session)
     }
 }

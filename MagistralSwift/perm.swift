@@ -12,8 +12,8 @@ public extension io.magistral.client.perm {
     
     public struct PermMeta {
         
-        private var _topic: String;
-        private var _permissions: [Int : (Bool, Bool)];
+        fileprivate var _topic: String;
+        fileprivate var _permissions: [Int : (Bool, Bool)];
         
         init(topic : String, perms : [Int : (Bool, Bool)]) {
             self._topic = topic;
@@ -32,7 +32,7 @@ public extension io.magistral.client.perm {
             return chs;
         }
         
-        func readable(ch : Int) -> Bool {
+        func readable(_ ch : Int) -> Bool {
             if let val = self._permissions[ch] {
                 let readable : Bool = val.0;
                 return readable;
@@ -41,7 +41,7 @@ public extension io.magistral.client.perm {
             }
         }
         
-        func writable(ch : Int) -> Bool {
+        func writable(_ ch : Int) -> Bool {
             if let val = self._permissions[ch] {
                 let writable : Bool = val.1;
                 return writable;
