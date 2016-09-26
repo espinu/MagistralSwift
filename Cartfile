@@ -1,4 +1,4 @@
 github "aciidb0mb3r/SwiftMQTT" "master"
 github "Alamofire/Alamofire" "master"
 github "krzyzanowskim/CryptoSwift" "master"
-github "BaiduHiDeviOS/SwiftyJSON" "swift3"
+github "SwiftyJSON/SwiftyJSON" "master"
