@@ -22,16 +22,18 @@
 		400BE3291D5105A800862EEC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE31C1D5105A800862EEC /* Message.swift */; };
 		400BE32C1D5105A800862EEC /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE31F1D5105A800862EEC /* RestApiManager.swift */; };
 		400BE32D1D5105A800862EEC /* sub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3201D5105A800862EEC /* sub.swift */; };
-		400BE3341D5107D300862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
-		400BE3371D5107D300862EEC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3311D5107D300862EEC /* CryptoSwift.framework */; };
 		400BE33A1D5107E600862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
 		400BE33D1D5107E600862EEC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3311D5107D300862EEC /* CryptoSwift.framework */; };
 		40137B601D912DFE00A88D6B /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
 		40259EEA1D51CCED004F711F /* perm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40259EE91D51CCED004F711F /* perm.swift */; };
-		405600B91D90ACE000A57037 /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
 		405600BD1D90AF1400A57037 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405600BC1D90AF1400A57037 /* main.swift */; };
-		406F25861D91735200F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
 		406F25871D91739800F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
+		40959AEE1D96CF0D000B4006 /* MagistralSwift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */; };
+		4096FE5D1DEB7D330036BFB5 /* Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4096FE5C1DEB7D330036BFB5 /* Index.swift */; };
+		40B5357C1DC23D0E006564C8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
+		40B5357D1DC23D0E006564C8 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE3311D5107D300862EEC /* CryptoSwift.framework */; };
+		40B5357E1DC23D0E006564C8 /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
+		40B5357F1DC23D0E006564C8 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
 		40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFE6FE1D5217DB0078C8E5 /* topics.swift */; };
 		40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D82CC41D547DE20094EE2D /* MqttClient.swift */; };
 		40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE2F61D51055C00862EEC /* MagistralSwift.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -73,6 +75,8 @@
 		405600B81D90ACE000A57037 /* SwiftMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftMQTT.framework; path = Carthage/Build/iOS/SwiftMQTT.framework; sourceTree = "<group>"; };
 		405600BC1D90AF1400A57037 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		406F25851D91735200F4D65F /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MagistralSwift.podspec; sourceTree = "<group>"; };
+		4096FE5C1DEB7D330036BFB5 /* Index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
 		40BFE6FE1D5217DB0078C8E5 /* topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topics.swift; sourceTree = "<group>"; };
 		40D82CC41D547DE20094EE2D /* MqttClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
 		52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
@@ -84,10 +88,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				400BE3341D5107D300862EEC /* Alamofire.framework in Frameworks */,
-				405600B91D90ACE000A57037 /* SwiftMQTT.framework in Frameworks */,
-				400BE3371D5107D300862EEC /* CryptoSwift.framework in Frameworks */,
-				406F25861D91735200F4D65F /* SwiftyJSON.framework in Frameworks */,
+				40B5357C1DC23D0E006564C8 /* Alamofire.framework in Frameworks */,
+				40B5357D1DC23D0E006564C8 /* CryptoSwift.framework in Frameworks */,
+				40B5357E1DC23D0E006564C8 /* SwiftMQTT.framework in Frameworks */,
+				40B5357F1DC23D0E006564C8 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +124,7 @@
 		400BE2EC1D51055C00862EEC = {
 			isa = PBXGroup;
 			children = (
+				40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */,
 				400BE3101D51058200862EEC /* Cartfile */,
 				400BE3121D51058A00862EEC /* Podfile */,
 				400BE2F81D51055C00862EEC /* MagistralSwift */,
@@ -224,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				400BE31C1D5105A800862EEC /* Message.swift */,
+				4096FE5C1DEB7D330036BFB5 /* Index.swift */,
 			);
 			name = io.magistral;
 			sourceTree = "<group>";
@@ -264,6 +270,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 400BE30A1D51055C00862EEC /* Build configuration list for PBXNativeTarget "MagistralSwift" */;
 			buildPhases = (
+				D536FBD7891802AE9F16B865 /* [CP] Check Pods Manifest.lock */,
 				13346BF33F9BBDA2D0D430A0 /* [CP] Check Pods Manifest.lock */,
 				400BE2F11D51055C00862EEC /* Sources */,
 				400BE2F21D51055C00862EEC /* Frameworks */,
@@ -271,6 +278,7 @@
 				400BE2F41D51055C00862EEC /* Resources */,
 				740C7CB674C91101797D5530 /* [CP] Copy Pods Resources */,
 				400BE3401D51087D00862EEC /* ShellScript */,
+				72FB96E82152306DD1606186 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -348,6 +356,7 @@
 			files = (
 				400BE3131D51058A00862EEC /* Podfile in Resources */,
 				400BE3111D51058200862EEC /* Cartfile in Resources */,
+				40959AEE1D96CF0D000B4006 /* MagistralSwift.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +419,21 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
+		72FB96E82152306DD1606186 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		740C7CB674C91101797D5530 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -423,6 +447,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D536FBD7891802AE9F16B865 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -446,6 +485,7 @@
 				400BE32D1D5105A800862EEC /* sub.swift in Sources */,
 				400BE3241D5105A800862EEC /* io.swift in Sources */,
 				40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */,
+				4096FE5D1DEB7D330036BFB5 /* Index.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,7 +546,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -549,7 +589,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -579,7 +619,7 @@
 				);
 				INFOPLIST_FILE = MagistralSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -610,7 +650,7 @@
 				);
 				INFOPLIST_FILE = MagistralSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwift;
@@ -631,7 +671,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = MagistralSwiftTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -650,7 +690,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = MagistralSwiftTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
