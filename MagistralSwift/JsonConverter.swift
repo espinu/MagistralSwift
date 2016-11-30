@@ -86,10 +86,17 @@ public class JsonConverter {
         return Message(topic: t, channel: c, msg: bytes, index: index, timestamp: ts)
     }
     
+    private func convert2index(json : JSON) -> Index {
+        let t = json["topic"].stringValue
+        let c = json["channel"].intValue
+        let index = json["index"].uInt64Value
+        return Index(topic: t, channel: c, index: index)
+    }
+    
     func handleMessageEvent(json : JSON) throws -> [Message] {
         var messages : [Message] = [];
         
-        print(json)
+//        print(json)
         
         if let msgs = json["message"].array {
             let count = msgs.count;
@@ -102,6 +109,24 @@ public class JsonConverter {
         }
         
         return messages;
+    }
+    
+    func handleIndexes(json : JSON) throws -> [Index] {
+        var indexes : [Index] = [];
+        
+//        print(json)
+        
+        if let msgs = json["indexes"].array {
+            let count = msgs.count;
+            
+            for i in 0 ... (count - 1) {
+                indexes.append(convert2index(json: msgs[i]));
+            }
+        } else if (json["indexes"]["topic"].string != nil) {
+            indexes.append(convert2index(json: json["indexes"]));
+        }
+        
+        return indexes;
     }
     
     func connectionPoints(json : JSON) -> (String, [ String : [[String : String]] ]) {
