@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		400BE2FA1D51055C00862EEC /* MagistralSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 400BE2F91D51055C00862EEC /* MagistralSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		400BE3061D51055C00862EEC /* MagistralSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3051D51055C00862EEC /* MagistralSwiftTests.swift */; };
 		400BE3111D51058200862EEC /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 400BE3101D51058200862EEC /* Cartfile */; };
 		400BE3131D51058A00862EEC /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 400BE3121D51058A00862EEC /* Podfile */; };
 		400BE3211D5105A800862EEC /* pub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3141D5105A800862EEC /* pub.swift */; };
@@ -35,6 +34,7 @@
 		40B5357E1DC23D0E006564C8 /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
 		40B5357F1DC23D0E006564C8 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
 		40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFE6FE1D5217DB0078C8E5 /* topics.swift */; };
+		40CF52BC1DF0337D0081A4E7 /* MagistralSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */; };
 		40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D82CC41D547DE20094EE2D /* MqttClient.swift */; };
 		40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE2F61D51055C00862EEC /* MagistralSwift.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
@@ -54,7 +54,6 @@
 		400BE2F91D51055C00862EEC /* MagistralSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MagistralSwift.h; sourceTree = "<group>"; };
 		400BE2FB1D51055C00862EEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		400BE3001D51055C00862EEC /* MagistralSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MagistralSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		400BE3051D51055C00862EEC /* MagistralSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagistralSwiftTests.swift; sourceTree = "<group>"; };
 		400BE3071D51055C00862EEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		400BE3101D51058200862EEC /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		400BE3121D51058A00862EEC /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
@@ -78,6 +77,7 @@
 		40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MagistralSwift.podspec; sourceTree = "<group>"; };
 		4096FE5C1DEB7D330036BFB5 /* Index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
 		40BFE6FE1D5217DB0078C8E5 /* topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topics.swift; sourceTree = "<group>"; };
+		40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagistralSwiftTests.swift; sourceTree = "<group>"; };
 		40D82CC41D547DE20094EE2D /* MqttClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
 		52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
 		6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.debug.xcconfig"; sourceTree = "<group>"; };
@@ -166,8 +166,8 @@
 		400BE3041D51055C00862EEC /* MagistralSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				400BE3051D51055C00862EEC /* MagistralSwiftTests.swift */,
 				400BE3071D51055C00862EEC /* Info.plist */,
+				40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */,
 			);
 			path = MagistralSwiftTests;
 			sourceTree = "<group>";
@@ -493,7 +493,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				400BE3061D51055C00862EEC /* MagistralSwiftTests.swift in Sources */,
+				40CF52BC1DF0337D0081A4E7 /* MagistralSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -664,6 +664,7 @@
 		400BE30E1D51055C00862EEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEVELOPMENT_TEAM = 5J496Q8XJ3;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -676,6 +677,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.magistral.sdk.MagistralSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos10.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -683,6 +685,7 @@
 		400BE30F1D51055C00862EEC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEVELOPMENT_TEAM = 5J496Q8XJ3;
 				FRAMEWORK_SEARCH_PATHS = (
