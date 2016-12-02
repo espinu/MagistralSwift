@@ -96,7 +96,9 @@ public class JsonConverter {
     func handleMessageEvent(json : JSON) throws -> [Message] {
         var messages : [Message] = [];
         
-//        print(json)
+        if json == JSON.null {
+            return messages;
+        }
         
         if let msgs = json["message"].array {
             let count = msgs.count;
@@ -114,7 +116,9 @@ public class JsonConverter {
     func handleIndexes(json : JSON) throws -> [Index] {
         var indexes : [Index] = [];
         
-//        print(json)
+        if json == JSON.null {
+            return indexes;
+        }
         
         if let msgs = json["indexes"].array {
             let count = msgs.count;

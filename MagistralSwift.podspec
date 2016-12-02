@@ -24,7 +24,7 @@ s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.author           = { 'roman.kurpatov' => 'roman.kurpatov@magistral.io' }
 s.source           = { :git => 'https://github.com/magistral-io/MagistralSwift.git', :tag => '0.5.5' }
 
-s.ios.deployment_target = '9.0'
+s.ios.deployment_target = '10.0'
 
 s.source_files = 'MagistralSwift/**/*'
 
@@ -34,8 +34,8 @@ s.source_files = 'MagistralSwift/**/*'
 
 # s.public_header_files = 'Pod/Classes/**/*.h'
 
-s.dependency 'Alamofire', '~> 4.0.0'
+s.dependency 'Alamofire', '~> 4.2.0'
 s.dependency 'SwiftMQTT'
-s.dependency 'CryptoSwift'
-s.dependency 'SwiftyJSON', '~> 3.1.0'
+s.dependency 'CryptoSwift', '~> 0.6.6'
+s.dependency 'SwiftyJSON', '~> 3.1.3'
 end
