@@ -20,6 +20,7 @@ open class RestApiManager: NSObject {
         case text
     }
     
+//    let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
     static let sharedInstance = RestApiManager()
     
     func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
@@ -29,16 +30,18 @@ open class RestApiManager: NSObject {
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
             .validate()
-            .responseJSON { response in
+            .responseJSON /*(queue: queue)*/ { response in
                
                 guard response.result.isSuccess else {
                     print("REST CALL ERROR: \(response.result.error)")
-                    onCompletion(nil, response.result.error as NSError?)
+                    onCompletion(JSON.null, response.result.error as NSError?)
                     return
                 }
                 
-                let json: JSON = JSON(data: response.data!);
-                onCompletion(json, nil);
+//                DispatchQueue.main.async {
+                    let json: JSON = JSON(data: response.data!);
+                    onCompletion(json, nil);
+//                }
         }
     }
     

@@ -53,6 +53,35 @@ public class JsonConverter {
         return io.magistral.client.perm.PermMeta(topic: topic, perms: pdic);
     }
     
+    func isValidJSON (data : Data) -> Bool {
+        let json = try? JSONSerialization.jsonObject(with: data, options: [])
+        return json != nil;
+    }
+    
+    func mqtt2msg(t : String, c: Int, ts: UInt64, json : JSON) -> [Message] {
+        
+        var result : [Message] = []
+        
+        let messages = json["messages"];
+        if json["messages"].exists() == false {
+            return result;
+        }
+        
+        for (_, subJson):(String, JSON) in messages {
+            
+            let offset = UInt64(subJson["offset"].stringValue);
+            let b64 = subJson["body"].stringValue;
+            
+            if let decodedData = NSData(base64Encoded: b64, options: NSData.Base64DecodingOptions(rawValue: 0)) {
+                let length = decodedData.length
+                var payload = [UInt8](repeating: 0, count: length)
+                decodedData.getBytes(&payload, length: length)
+                result.append(Message(topic: t, channel: c, msg: payload, index: offset!, timestamp: ts))
+            }
+        }        
+        return result;
+    }
+    
     func handle(json : JSON) throws -> [io.magistral.client.perm.PermMeta] {
         
         var ps : [io.magistral.client.perm.PermMeta] = []

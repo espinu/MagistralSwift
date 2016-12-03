@@ -57,12 +57,55 @@ public class Magistral : IMagistral {
         });
     }
     
-//    private func indexes(callback : @escaping (_ indexes : [ String : [Int : UInt64]]) -> Void) {
+    
+    private func read(_ topic : String, group : String, channel : Int, listener : @escaping io.magistral.client.sub.NetworkListener, callback: @escaping () -> Void) {
+        let baseURL = "https://" + self.host + "/api/magistral/data/read"
+        
+        let user = self.pubKey + "|" + self.subKey;
+        
+        var params : Parameters = [ : ]
+        
+        params["group"] = group as AnyObject?;
+        params["topic"] = topic as AnyObject?;
+        params["channel"] = channel as AnyObject?;
+        
+        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+            do {
+                let messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
+                
+                for m in messages {
+                    
+                    if let chixs = self.init_indexes[m.topic()] {
+                        if let ixs = chixs[m.channel()] {
+                            if m.index() > ixs {
+                                listener(m, nil)
+                                self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                            }
+                        } else {
+                            listener(m, nil)
+                            self.init_indexes[m.topic()]?[m.channel()] = m.index()                                }
+                    } else {
+                        listener(m, nil)
+                        self.init_indexes[m.topic()] = [ : ]
+                        self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                    }
+                }
+                callback();
+            } catch {
+                let eve = Message(topic: "null", channel: 0, msg: [], index: 0, timestamp: 0)
+                listener(eve, MagistralException.conversionError)
+                callback();
+            }
+        })
+    }
+    
+//    private func indexes(group : String, callback : @escaping (_ indexes : [ String : [Int : UInt64]]) -> Void) {
 //        let baseURL = "https://" + self.host + "/api/magistral/data/indexes"
 //        
 //        let user = self.pubKey + "|" + self.subKey;
 //        
-//        let params : Parameters = [ : ]
+//        var params : Parameters = [ : ]
+//        params["group"] = group;
 //        
 //        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
 //            do {
@@ -83,6 +126,45 @@ public class Magistral : IMagistral {
 //            }
 //        })
 //    }
+
+    
+    private func handleMqttMessage(m : Message) {
+        if let groupListeners = self.lstMap[m.topic()] {
+            for (_, listener) in groupListeners {
+                
+                let msg = String(bytes: m.body(), encoding: String.Encoding.utf8);
+                
+                if let dataFromString = msg?.data(using: .utf8, allowLossyConversion: false) {
+                    
+//                    print(msg)
+                    
+                    if JsonConverter.sharedInstance.isValidJSON(data: dataFromString) {
+                        
+                        let json = JSON(data: dataFromString)
+                        let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
+                        
+                        for m in messages {
+                            
+                            if let chixs = self.init_indexes[m.topic()] {
+                                if let ixs = chixs[m.channel()] {
+                                    if m.index() > ixs {
+                                        listener(m, nil)
+                                        self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                                    }
+                                } else {
+                                    listener(m, nil)
+                                    self.init_indexes[m.topic()]?[m.channel()] = m.index()                                }
+                            } else {
+                                listener(m, nil)
+                                self.init_indexes[m.topic()] = [ : ]
+                                self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     private func initMqtt(token : String, connected : Connected?) {
         
@@ -93,51 +175,10 @@ public class Magistral : IMagistral {
         
         mqtt?.lastWillMessage = MQTTPubMsg(topic: "presence/" + self.pubKey + "/" + token, payload: Data(bytes: [0]), retain: true, QoS: MQTTQoS.atLeastOnce);
         mqtt?.delegate = mqtt;
-
+        
         mqtt?.addMessageListener({ ref, message in
-            
-            if let groupListeners = self.lstMap[message.topic()] {
-                for (group, listener) in groupListeners {
-                    
-                    let baseURL = "https://" + self.host + "/api/magistral/data/read"
-                    
-                    let user = self.pubKey + "|" + self.subKey;
-                    
-                    var params : Parameters = [ : ]
-                    
-                    params["group"] = group as AnyObject?;
-                    params["topic"] = message.topic() as AnyObject?;
-                    params["channel"] = message.channel() as AnyObject?;
-                    
-                    params["index"] = String(message.index()) as AnyObject?;
-                    
-                    RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
-                        do {
-                            let messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
-                            
-                            for m in messages {                                
-//                                listener(m, nil)
-                                
-                                if let chixs = self.init_indexes[m.topic()] {
-                                    if let ixs = chixs[m.channel()] {
-                                        if m.index() > ixs {
-                                            listener(m, nil)
-                                            self.init_indexes[m.topic()]?[m.channel()] = m.index()
-                                        }
-                                    }
-                                } else {
-                                    listener(m, nil)
-                                    self.init_indexes[m.topic()] = [ : ]
-                                    self.init_indexes[m.topic()]?[m.channel()] = m.index()
-                                }
-                            }
-                        } catch {
-                            let eve = Message(topic: "null", channel: 0, msg: [], index: 0, timestamp: 0)
-                            listener(eve, MagistralException.conversionError)
-                        }
-                    })
-                }
-            }
+//            print("Dispatch -> " + message.topic() + " :" + String(message.channel()) + " - " + String(message.index()));
+            self.handleMqttMessage(m: message);
         });
         
         mqtt?.connect(completion: { mqtt_connected, error in
@@ -215,6 +256,10 @@ public class Magistral : IMagistral {
         self.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
             callback?(meta, err)
         })
+        
+//        self.indexes(group: group, callback: { indexes in
+//            print(indexes);
+//        });
         
         if let listenerGroups = self.lstMap[topic] {
             if listenerGroups[group] == nil {

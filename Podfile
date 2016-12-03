@@ -1,5 +1,5 @@
 use_frameworks!
-platform :ios, '10.0'
+platform :ios, '9.0'
 
 target 'MagistralSwift' do
     pod 'SwiftMQTT', '~> 2.0.0'
