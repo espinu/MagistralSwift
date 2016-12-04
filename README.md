@@ -27,7 +27,7 @@ Usage
 
 ## Requirements
 
-- iOS 10.0+
+- iOS 9.0+
 - Xcode 8.0+
 - Swift 3.0+
 
@@ -51,7 +51,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'MagistralSwift', '~> 0.5.1'
+    pod 'MagistralSwift', '~> 0.5.5'
 end
 ```
 

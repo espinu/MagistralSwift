@@ -26,6 +26,7 @@
 		40259EEA1D51CCED004F711F /* perm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40259EE91D51CCED004F711F /* perm.swift */; };
 		405600BD1D90AF1400A57037 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405600BC1D90AF1400A57037 /* main.swift */; };
 		406F25871D91739800F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
+		409542841DF42C4A0074FA01 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 409542831DF42C4A0074FA01 /* README.md */; };
 		40959AEE1D96CF0D000B4006 /* MagistralSwift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */; };
 		4096FE5D1DEB7D330036BFB5 /* Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4096FE5C1DEB7D330036BFB5 /* Index.swift */; };
 		40B5357C1DC23D0E006564C8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
@@ -72,6 +73,7 @@
 		405600B81D90ACE000A57037 /* SwiftMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftMQTT.framework; path = Carthage/Build/iOS/SwiftMQTT.framework; sourceTree = "<group>"; };
 		405600BC1D90AF1400A57037 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		406F25851D91735200F4D65F /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		409542831DF42C4A0074FA01 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MagistralSwift.podspec; sourceTree = "<group>"; };
 		4096FE5C1DEB7D330036BFB5 /* Index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
 		40BFE6FE1D5217DB0078C8E5 /* topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topics.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		400BE2EC1D51055C00862EEC = {
 			isa = PBXGroup;
 			children = (
+				409542831DF42C4A0074FA01 /* README.md */,
 				40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */,
 				400BE3101D51058200862EEC /* Cartfile */,
 				400BE3121D51058A00862EEC /* Podfile */,
@@ -471,6 +474,7 @@
 				400BE3261D5105A800862EEC /* JsonConverter.swift in Sources */,
 				400BE3271D5105A800862EEC /* Magistral.swift in Sources */,
 				400BE3221D5105A800862EEC /* data.swift in Sources */,
+				409542841DF42C4A0074FA01 /* README.md in Sources */,
 				400BE3291D5105A800862EEC /* Message.swift in Sources */,
 				400BE3231D5105A800862EEC /* interfaces.swift in Sources */,
 				405600BD1D90AF1400A57037 /* main.swift in Sources */,

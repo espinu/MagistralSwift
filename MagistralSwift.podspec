@@ -35,7 +35,7 @@ s.source_files = 'MagistralSwift/**/*'
 # s.public_header_files = 'Pod/Classes/**/*.h'
 
 s.dependency 'Alamofire', '~> 4.2.0'
-s.dependency 'SwiftMQTT'
+s.dependency 'SwiftMQTT', '~> 2.0.0'
 s.dependency 'CryptoSwift', '~> 0.6.6'
 s.dependency 'SwiftyJSON', '~> 3.1.3'
 end
