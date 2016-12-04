@@ -24,6 +24,10 @@ public enum MagistralException: Error {
     case historyInvocationError
     case fetchTopicsError
     
+    case topicNotFound
+    case invalidChannelNumber
+    case channelOutOfBound
+    
     case permissionFetchError
     case permissionGrantError
     case permissionRevokationError

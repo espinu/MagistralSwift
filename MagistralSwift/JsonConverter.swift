@@ -38,16 +38,20 @@ public class JsonConverter {
     }
     
     private func handlePerm(perm : JSON) -> io.magistral.client.perm.PermMeta {
+        
         let topic = perm["topic"].stringValue
         
-        let read = perm["index"].boolValue
-        let write = perm["timestamp"].boolValue
+        let read = perm["read"].boolValue
+        let write = perm["write"].boolValue
         
         var pdic = [Int : (Bool, Bool)]();
+        
         if let channels = perm["channels"].array {
-            for ch in 0 ... (channels.count - 1) {
-                pdic[ch] = (read, write);
+            for ch in channels {
+                pdic[Int(ch.stringValue)!] = (read, write);
             }
+        } else {
+            pdic[Int(perm["channels"].stringValue)!] = (read, write);
         }
         
         return io.magistral.client.perm.PermMeta(topic: topic, perms: pdic);
@@ -87,10 +91,9 @@ public class JsonConverter {
         var ps : [io.magistral.client.perm.PermMeta] = []
 
         if let perms = json["permission"].array {
-            let count = perms.count;
             
-            for i in 0 ... (count - 1) {
-                ps.append(handlePerm(perm: perms[i]));
+            for perm in perms {
+                ps.append(handlePerm(perm: perm));
             }
             
         } else if (json["permission"]["topic"].string != nil) {

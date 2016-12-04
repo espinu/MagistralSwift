@@ -57,20 +57,20 @@ public class Magistral : IMagistral {
         });
     }
     
-    
-    private func read(_ topic : String, group : String, channel : Int, listener : @escaping io.magistral.client.sub.NetworkListener, callback: @escaping () -> Void) {
+    private func read(_ topic : String, group : String, channels : [Int], listener : @escaping io.magistral.client.sub.NetworkListener, callback: @escaping () -> Void) {
         let baseURL = "https://" + self.host + "/api/magistral/data/read"
         
         let user = self.pubKey + "|" + self.subKey;
         
-        var params : Parameters = [ : ]
-        
-        params["group"] = group as AnyObject?;
-        params["topic"] = topic as AnyObject?;
-        params["channel"] = channel as AnyObject?;
+        let params: Parameters = [
+            "group": group,
+            "topic": topic,
+            "channel": channels
+        ]
         
         RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
+                
                 let messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
                 
                 for m in messages {
@@ -98,35 +98,6 @@ public class Magistral : IMagistral {
             }
         })
     }
-    
-//    private func indexes(group : String, callback : @escaping (_ indexes : [ String : [Int : UInt64]]) -> Void) {
-//        let baseURL = "https://" + self.host + "/api/magistral/data/indexes"
-//        
-//        let user = self.pubKey + "|" + self.subKey;
-//        
-//        var params : Parameters = [ : ]
-//        params["group"] = group;
-//        
-//        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
-//            do {
-//                let indexes = try JsonConverter.sharedInstance.handleIndexes(json: json);
-//                for i in indexes {
-//                    
-//                    if (self.init_indexes[i.topic()] != nil) {
-//                        self.init_indexes[i.topic()]?[i.channel()] = i.index()
-//                    } else {
-//                        self.init_indexes[i.topic()] = [ : ]
-//                        self.init_indexes[i.topic()]?[i.channel()] = i.index()
-//                    }
-//                }
-//                
-//                callback(self.init_indexes);
-//            } catch {
-//                callback(self.init_indexes);
-//            }
-//        })
-//    }
-
     
     private func handleMqttMessage(m : Message) {
         if let groupListeners = self.lstMap[m.topic()] {
@@ -250,16 +221,47 @@ public class Magistral : IMagistral {
     }
     
     public func subscribe(_ topic : String, group : String, channel : Int, listener : @escaping io.magistral.client.sub.NetworkListener, callback : io.magistral.client.sub.Callback?) throws {
+        
+        let subMeta : io.magistral.client.sub.SubMeta = io.magistral.client.sub.SubMeta(topic: topic, channel: channel, group: group, endPoints: []);
 
         let ch = (channel < -1) ? -1 : channel;
         
-        self.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
-            callback?(meta, err)
-        })
-        
-//        self.indexes(group: group, callback: { indexes in
-//            print(indexes);
-//        });
+        try self.topics { smeta, error in
+            
+            if error != nil {
+                callback?(subMeta, error);
+            }
+            
+            for meta in smeta {
+                if topic != meta.topic() { continue; }
+                
+                if (channel >= meta.channels().count) {
+                    callback?(subMeta, MagistralException.channelOutOfBound);
+                    return;
+                } else {
+                    if (ch != -1) {
+                        self.read(topic, group: group, channels: [ch], listener: listener, callback: {
+                            self.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
+                                callback?(meta, err)
+                            })
+                        });
+                    } else {
+                        var xx : [Int] = []
+                        for _ch in meta.channels() {
+                            xx.append(_ch)
+                        }
+                        self.read(topic, group: group, channels: xx, listener: listener, callback: {
+                            self.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
+                                callback?(meta, err)
+                            })
+                        });
+                    }
+                }
+                return;
+            }
+            
+            callback?(subMeta, MagistralException.topicNotFound);
+        }
         
         if let listenerGroups = self.lstMap[topic] {
             if listenerGroups[group] == nil {
@@ -286,10 +288,33 @@ public class Magistral : IMagistral {
     
     public func topics(_ callback : @escaping io.magistral.client.topics.Callback) throws {
         try permissions({ perms, err in
+            
             var topics : [io.magistral.client.topics.TopicMeta] = []
+
+            var map : [ String : [Int]] = [ : ]
             
             for p in perms {
-                topics.append(io.magistral.client.topics.TopicMeta(topic: p.topic(), channels: p.channels()))
+                
+                if map.keys.contains(p.topic()) {
+                    for _ch in p.channels() {
+                        map[p.topic()]?.append(_ch)
+                    }
+                } else {
+                    var channels : [Int] = [];
+                    for _ch in p.channels() {
+                        channels.append(_ch)
+                    }
+                    map[p.topic()] = channels
+                }
+            }
+            
+            for mk in map.keys {
+                var chs : Set<Int> = Set<Int>();
+                
+                for x in map[mk]! {
+                    chs.insert(x);
+                }
+                topics.append(io.magistral.client.topics.TopicMeta(topic: mk, channels: chs))
             }
             
             callback(topics, err == nil ? nil : MagistralException.fetchTopicsError);

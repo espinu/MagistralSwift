@@ -13,6 +13,15 @@ import SwiftyJSON
 typealias ServiceResponse = (JSON, NSError?) -> Void
 typealias ServiceResponseText = (String, NSError?) -> Void
 
+public struct MagistralEncoding : ParameterEncoding {
+    
+    public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+        let res = try URLEncoding.queryString.encode(urlRequest, with: parameters).url?.absoluteString.replacingOccurrences(of: "%5B%5D=", with: "=");
+        return URLRequest(url: URL(string: res!)!);
+    }
+    
+}
+
 open class RestApiManager: NSObject {
     
     enum ResponseType {
@@ -20,29 +29,33 @@ open class RestApiManager: NSObject {
         case text
     }
     
-//    let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
+    let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
     static let sharedInstance = RestApiManager()
     
+    
+    
     func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
-        
+//        debugPrint(
         Alamofire
-            .request(path, method: .get, parameters: parameters)
+            .request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
             .validate()
-            .responseJSON /*(queue: queue)*/ { response in
-               
+            .responseJSON (queue: queue) { response in
+                
                 guard response.result.isSuccess else {
                     print("REST CALL ERROR: \(response.result.error)")
                     onCompletion(JSON.null, response.result.error as NSError?)
                     return
                 }
                 
-//                DispatchQueue.main.async {
+                DispatchQueue.main.async {
                     let json: JSON = JSON(data: response.data!);
                     onCompletion(json, nil);
-//                }
+                }
         }
+//        )
+        
     }
     
     func makeHTTPGetRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
