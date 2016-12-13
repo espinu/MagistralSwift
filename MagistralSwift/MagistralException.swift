@@ -28,6 +28,8 @@ public enum MagistralException: Error {
     case invalidChannelNumber
     case channelOutOfBound
     
+    case noPermissionsError
+    
     case permissionFetchError
     case permissionGrantError
     case permissionRevokationError

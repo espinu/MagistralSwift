@@ -235,11 +235,15 @@ public class Magistral : IMagistral {
             for meta in smeta {
                 if topic != meta.topic() { continue; }
                 
-                if (channel >= meta.channels().count) {
-                    callback?(subMeta, MagistralException.channelOutOfBound);
+                if channel == -1 && meta.channels().count == 0 {
+                    callback?(subMeta, MagistralException.noPermissionsError);
+                    return;
+                } else if !meta.channels().contains(channel) {
+                    callback?(subMeta, MagistralException.noPermissionsError);
                     return;
                 } else {
-                    if (ch != -1) {
+                    
+                    if ch != -1 {
                         self.read(topic, group: group, channels: [ch], listener: listener, callback: {
                             self.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
                                 callback?(meta, err)
