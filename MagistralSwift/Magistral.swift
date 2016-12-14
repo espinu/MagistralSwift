@@ -106,9 +106,7 @@ public class Magistral : IMagistral {
                 let msg = String(bytes: m.body(), encoding: String.Encoding.utf8);
                 
                 if let dataFromString = msg?.data(using: .utf8, allowLossyConversion: false) {
-                    
-//                    print(msg)
-                    
+                                        
                     if JsonConverter.sharedInstance.isValidJSON(data: dataFromString) {
                         
                         let json = JSON(data: dataFromString)
@@ -148,7 +146,7 @@ public class Magistral : IMagistral {
         mqtt?.delegate = mqtt;
         
         mqtt?.addMessageListener({ ref, message in
-//            print("Dispatch -> " + message.topic() + " :" + String(message.channel()) + " - " + String(message.index()));
+            print("Dispatch -> " + message.topic() + " :" + String(message.channel()) + " - " + String(message.index()));
             self.handleMqttMessage(m: message);
         });
         
@@ -238,7 +236,7 @@ public class Magistral : IMagistral {
                 if channel == -1 && meta.channels().count == 0 {
                     callback?(subMeta, MagistralException.noPermissionsError);
                     return;
-                } else if !meta.channels().contains(channel) {
+                } else if channel >= 0 && !meta.channels().contains(channel) {
                     callback?(subMeta, MagistralException.noPermissionsError);
                     return;
                 } else {
