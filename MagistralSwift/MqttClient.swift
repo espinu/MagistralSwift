@@ -74,8 +74,7 @@ class MqttClient : MQTTSession, MQTTSessionDelegate {
     func mqttDidReceive(message data: Data, in topic: String, from session: SwiftMQTT.MQTTSession) {
         for l in msgListeners {
             
-            var bytes = [UInt8](repeating: 0, count: data.count)
-            data.copyBytes(to: &bytes, count: data.count)
+            let bytes = [UInt8](data);
             
             let str = topic;
             let index = self.bytes2long(bytes: bytes);
