@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
 s.name             = 'MagistralSwift'
-s.version          = '0.5.9'
+s.version          = '0.5.10'
 s.summary          = 'Magistral Swift SDK'
 
 # This description is used to generate tags and improve search results.
@@ -22,7 +22,7 @@ s.description      = 'Swift 3 SDK for Magistral Data Streaming Service'
 s.homepage         = 'https://github.com/magistral-io/MagistralSwift'
 s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.author           = { 'roman.kurpatov' => 'roman.kurpatov@magistral.io' }
-s.source           = { :git => 'https://github.com/magistral-io/MagistralSwift.git', :tag => '0.5.9' }
+s.source           = { :git => 'https://github.com/magistral-io/MagistralSwift.git', :tag => '0.5.10 }
 
 s.ios.deployment_target = '9.0'
 
@@ -35,7 +35,7 @@ s.source_files = 'MagistralSwift/**/*'
 # s.public_header_files = 'Pod/Classes/**/*.h'
 
 s.dependency 'Alamofire', '~> 4.2.0'
-s.dependency 'SwiftMQTT', :git => 'https://github.com/7Linternational/SwiftMQTT’
+s.dependency 'SwiftMQTT'
 s.dependency 'CryptoSwift', '~> 0.6.6'
 s.dependency 'SwiftyJSON', '~> 3.1.3'
 end
