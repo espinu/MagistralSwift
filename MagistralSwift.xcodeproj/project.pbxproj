@@ -68,7 +68,6 @@
 		400BE31F1D5105A800862EEC /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		400BE3201D5105A800862EEC /* sub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sub.swift; sourceTree = "<group>"; };
 		400BE32E1D5107D300862EEC /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		400BE3311D5107D300862EEC /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
 		40259EE91D51CCED004F711F /* perm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = perm.swift; sourceTree = "<group>"; };
 		405600B81D90ACE000A57037 /* SwiftMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftMQTT.framework; path = Carthage/Build/iOS/SwiftMQTT.framework; sourceTree = "<group>"; };
 		405600BC1D90AF1400A57037 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -114,7 +113,6 @@
 				406F25851D91735200F4D65F /* SwiftyJSON.framework */,
 				405600B81D90ACE000A57037 /* SwiftMQTT.framework */,
 				400BE32E1D5107D300862EEC /* Alamofire.framework */,
-				400BE3311D5107D300862EEC /* CryptoSwift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
