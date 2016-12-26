@@ -518,8 +518,18 @@ public class Magistral : IMagistral {
         })
     }
     
-    public func close() {        
-        mqtt?.disconnect();
+    deinit {
         self.active = false;
+        if (mqtt != nil) {
+            mqtt?.removeMessageListeners();
+            mqtt?.disconnect();
+        }
+    }
+    
+    public func close() {
+        self.active = false;
+        mqtt?.removeMessageListeners();
+        mqtt?.disconnect();
+        exit(0)
     }
 }

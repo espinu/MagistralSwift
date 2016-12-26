@@ -14,8 +14,6 @@ class MqttClient : MQTTSession, MQTTSessionDelegate {
     typealias MessageListener = (MQTTSession, Message) -> Void
     
     var msgListeners : [MessageListener] = [];
-
-    
     func addMessageListener(_ listener : @escaping MessageListener) {
         msgListeners.append(listener);
     }
@@ -61,8 +59,7 @@ class MqttClient : MQTTSession, MQTTSessionDelegate {
     }
     
     func unsubscribe(_ topic : String, channel: Int, callback : io.magistral.client.sub.Callback?) {
-        let sfx = "/" + String(channel);
-        super.unSubscribe(from: topic + sfx) { succeeded, error -> Void in
+        super.unSubscribe(from: topic + ":" + String(channel)) { succeeded, error -> Void in
             callback?(io.magistral.client.sub.SubMeta(topic: topic, channel: -1, group: "", endPoints: []), succeeded ? nil : MagistralException.unsubscriptionError)
         }
     }
