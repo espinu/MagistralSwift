@@ -44,6 +44,8 @@ public protocol IAccessControl {
 
 public protocol IHistory {
     func history(_ topic: String, channel: Int, count: Int, callback : @escaping io.magistral.client.data.Callback) throws;
+    func history(_ topic: String, channel: Int, startingIndex: Int, count: Int, callback : @escaping io.magistral.client.data.Callback) throws;
+    
     func history(_ topic: String, channel: Int, start: UInt64, count: Int, callback : @escaping io.magistral.client.data.Callback) throws;
     func history(_ topic: String, channel: Int, start: UInt64, end: UInt64, callback : @escaping io.magistral.client.data.Callback) throws;
 }

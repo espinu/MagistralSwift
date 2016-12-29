@@ -275,13 +275,16 @@ public class Magistral : IMagistral {
     }
     
     public func unsubscribe(_ topic : String, callback : io.magistral.client.sub.Callback?) throws {
-        self.mqtt?.unsubscribe(topic, callback: { meta, err in
+        let hts = topic.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ".", with: "-");
+        self.mqtt?.unsubscribe(self.subKey + "/" + hts, callback: { meta, err in
             callback?(io.magistral.client.sub.SubMeta(topic: meta.topic(), channel: meta.channel(), group: meta.group(), endPoints: meta.endPoints()), err);
         })
     }
     
     public func unsubscribe(_ topic : String, channel : Int, callback : io.magistral.client.sub.Callback?) throws {
-        self.mqtt?.unsubscribe(topic, callback: { meta, err in
+        var hts = self.subKey + "/" + topic.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ".", with: "-");
+        
+        self.mqtt?.unsubscribe(hts, channel: channel, callback: { meta, err in
             callback?(io.magistral.client.sub.SubMeta(topic: meta.topic(), channel: meta.channel(), group: meta.group(), endPoints: meta.endPoints()), err);
         })
     }
@@ -462,6 +465,31 @@ public class Magistral : IMagistral {
     
     public func history(_ topic: String, channel: Int, count: Int, callback : @escaping io.magistral.client.data.Callback) throws {
         try self.history(topic, channel: channel, start: UInt64(0), count: count, callback: callback)
+    }
+    
+    public func history(_ topic: String, channel: Int, startingIndex: Int, count: Int, callback: @escaping io.magistral.client.data.Callback) throws {
+        let baseURL = "https://" + self.host + "/api/magistral/data/historyPage"
+        
+        var params : Parameters = [ : ]
+        
+        params["topic"] = topic;
+        params["channel"] = channel;
+        params["startIndex"] = startingIndex;
+        params["count"] = count;
+        
+        let user = self.pubKey + "|" + self.subKey;
+        
+        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+            do {
+                let history : io.magistral.client.data.History = try JsonConverter.sharedInstance.handle(json: json);
+                callback(history, err == nil ? nil : MagistralException.historyInvocationError);
+            } catch MagistralException.historyInvocationError {
+                let history = io.magistral.client.data.History(messages: [Message]());
+                callback(history, MagistralException.historyInvocationError)
+            } catch {
+                
+            }
+        })
     }
     
     public func history(_ topic: String, channel: Int, start: UInt64, count: Int, callback : @escaping io.magistral.client.data.Callback) throws {
