@@ -118,11 +118,11 @@ public class JsonConverter {
         return Message(topic: t, channel: c, msg: bytes, index: index, timestamp: ts)
     }
     
-    private func convert2index(json : JSON) -> Index {
+    private func convert2index(group: String, json : JSON) -> io.magistral.client.data.index.TopicChannelIndex {
         let t = json["topic"].stringValue
         let c = json["channel"].intValue
-        let index = json["index"].uInt64Value
-        return Index(topic: t, channel: c, index: index)
+        let i = json["index"].uInt64Value
+        return io.magistral.client.data.index.TopicChannelIndex(topic: t, channel: c, group: group, index: i)
     }
     
     func handleMessageEvent(json : JSON) throws -> [Message] {
@@ -145,24 +145,27 @@ public class JsonConverter {
         return messages;
     }
     
-    func handleIndexes(json : JSON) throws -> [Index] {
-        var indexes : [Index] = [];
+    func handleIndexes(group: String, json : JSON) throws -> io.magistral.client.data.index.TopicChannelIndex {
+        
+        var index : io.magistral.client.data.index.TopicChannelIndex
+            = io.magistral.client.data.index.TopicChannelIndex(topic: "", channel: 0, group: group, index: 0);
         
         if json == JSON.null {
-            return indexes;
+            return index;
         }
         
         if let msgs = json["indexes"].array {
             let count = msgs.count;
             
-            for i in 0 ... (count - 1) {
-                indexes.append(convert2index(json: msgs[i]));
+            for _ in 0 ... (count - 1) {
+                index = convert2index(group: group, json: json)
+                break;
             }
-        } else if (json["indexes"]["topic"].string != nil) {
-            indexes.append(convert2index(json: json["indexes"]));
+        } else if (json["topic"].string != nil) {
+            index = convert2index(group: group, json: json)
         }
         
-        return indexes;
+        return index;
     }
     
     func connectionPoints(json : JSON) -> (String, [ String : [[String : String]] ]) {

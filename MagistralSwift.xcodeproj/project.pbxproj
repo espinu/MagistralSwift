@@ -28,11 +28,11 @@
 		406F25871D91739800F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
 		409542841DF42C4A0074FA01 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 409542831DF42C4A0074FA01 /* README.md */; };
 		40959AEE1D96CF0D000B4006 /* MagistralSwift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */; };
-		4096FE5D1DEB7D330036BFB5 /* Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4096FE5C1DEB7D330036BFB5 /* Index.swift */; };
 		40B5357C1DC23D0E006564C8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
 		40B5357E1DC23D0E006564C8 /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
 		40B5357F1DC23D0E006564C8 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
 		40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFE6FE1D5217DB0078C8E5 /* topics.swift */; };
+		40C9ACB31E153C23001E70B1 /* index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C9ACB21E153C23001E70B1 /* index.swift */; };
 		40CF52BC1DF0337D0081A4E7 /* MagistralSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */; };
 		40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D82CC41D547DE20094EE2D /* MqttClient.swift */; };
 		40D8E8251D55E542004E14CF /* MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE2F61D51055C00862EEC /* MagistralSwift.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -74,8 +74,8 @@
 		406F25851D91735200F4D65F /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		409542831DF42C4A0074FA01 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		40959AED1D96CF0D000B4006 /* MagistralSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MagistralSwift.podspec; sourceTree = "<group>"; };
-		4096FE5C1DEB7D330036BFB5 /* Index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
 		40BFE6FE1D5217DB0078C8E5 /* topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topics.swift; sourceTree = "<group>"; };
+		40C9ACB21E153C23001E70B1 /* index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = index.swift; sourceTree = "<group>"; };
 		40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagistralSwiftTests.swift; sourceTree = "<group>"; };
 		40D82CC41D547DE20094EE2D /* MqttClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
 		52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
@@ -181,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				400BE3151D5105A800862EEC /* data.swift */,
+				40C9ACB21E153C23001E70B1 /* index.swift */,
 			);
 			name = io.magistral.client.data;
 			sourceTree = "<group>";
@@ -226,7 +227,6 @@
 			isa = PBXGroup;
 			children = (
 				400BE31C1D5105A800862EEC /* Message.swift */,
-				4096FE5C1DEB7D330036BFB5 /* Index.swift */,
 			);
 			name = io.magistral;
 			sourceTree = "<group>";
@@ -480,8 +480,8 @@
 				40D82CC51D547DE20094EE2D /* MqttClient.swift in Sources */,
 				400BE32D1D5105A800862EEC /* sub.swift in Sources */,
 				400BE3241D5105A800862EEC /* io.swift in Sources */,
+				40C9ACB31E153C23001E70B1 /* index.swift in Sources */,
 				40BFE6FF1D5217DB0078C8E5 /* topics.swift in Sources */,
-				4096FE5D1DEB7D330036BFB5 /* Index.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

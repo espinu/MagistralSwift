@@ -25,6 +25,8 @@ public protocol IMagistral : IAccessControl, IHistory {
     func topic(_ topic : String, callback : @escaping io.magistral.client.topics.Callback) throws;
     func topics(_ callback : @escaping io.magistral.client.topics.Callback) throws;
     
+    func index(_ topic : String, channel : Int, group : String, callback : @escaping io.magistral.client.data.index.Callback) throws;
+    
     func close();
 }
 

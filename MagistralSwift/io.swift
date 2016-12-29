@@ -11,7 +11,9 @@ import Foundation
 public struct io {
     public struct magistral {
         public struct client {
-            public struct data {}
+            public struct data {
+                public struct index {}
+            }
             public struct pub {}
             public struct sub {}
             public struct topics {}

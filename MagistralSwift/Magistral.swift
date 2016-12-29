@@ -57,6 +57,28 @@ public class Magistral : IMagistral {
         });
     }
     
+    public func index(_ topic: String, channel: Int, group: String, callback: @escaping io.magistral.client.data.index.Callback) throws {
+        
+        let baseURL = "https://" + self.host + "/api/magistral/data/index"
+        
+        var params : Parameters = [ : ]
+        params["topic"] = topic;
+        params["channel"] = channel;
+        params["group"] = group;
+        
+        let user = self.pubKey + "|" + self.subKey;
+        
+        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+            do {
+                let index : io.magistral.client.data.index.TopicChannelIndex = try JsonConverter.sharedInstance.handleIndexes(group : group, json: json);
+                callback(index, err == nil ? nil : MagistralException.indexFetchError);
+            } catch {
+                let eve = io.magistral.client.data.index.TopicChannelIndex(topic: topic, channel: channel, group: group, index: 0)
+                callback(eve, MagistralException.indexFetchError)
+            }
+        })
+    }
+    
     private func read(_ topic : String, group : String, channels : [Int], listener : @escaping io.magistral.client.sub.NetworkListener, callback: @escaping () -> Void) {
         let baseURL = "https://" + self.host + "/api/magistral/data/read"
         

@@ -20,7 +20,8 @@ public enum MagistralException: Error {
     case publishError
     case subscriptionError
     case unsubscriptionError
-    
+   
+    case indexFetchError
     case historyInvocationError
     case fetchTopicsError
     

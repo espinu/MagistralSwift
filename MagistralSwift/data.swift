@@ -24,4 +24,5 @@ public extension io.magistral.client.data {
     }
     
     typealias Callback = (History, MagistralException?) -> Void
+
 }
