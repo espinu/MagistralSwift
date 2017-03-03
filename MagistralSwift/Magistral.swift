@@ -173,31 +173,26 @@ public class Magistral : IMagistral {
         });
         
         mqtt?.connect(completion: { [weak self] mqtt_connected, error in
-            self?.handleConnection(succeed: mqtt_connected, error: error,token : token, connected : connected)
+            self?.handleMqttConnection(succeed: mqtt_connected, error: error,token : token, connected : connected)
         }, disconnect: { [weak self] session in
-            self?.reconnect(session: session, token: token, connected: connected)
+            self?.handleMqttDisconnect(session: session, token: token, connected: connected)
         }, socketerr: { [weak self] session in
-            self?.handleSocketError()
+            self?.handleMqttSocketError()
         })
     }
     
-    private func reconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+    private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
         if (self.active) {
             print("Connection dropped -> reconnection in 5 sec.")
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-                session.connect(completion: { mqtt_connected, error in
-                    if (mqtt_connected) {
-                        self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
-                        self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
-                        self.active = true
-                        connected!(self.active, self);
-                    }
+                session.connect(completion: { [weak self] mqtt_connected, error in
+                    self?.handleMqttConnection(succeed: mqtt_connected, error: error, token: token, connected: connected)
                 });
             }
         }
     }
     
-    private func handleSocketError() {
+    private func handleMqttSocketError() {
         if (self.active) {
             if (self.active) {
                 print("Socket error")
@@ -205,7 +200,7 @@ public class Magistral : IMagistral {
         }
     }
     
-    private func handleConnection(succeed: Bool, error: Error, token : String, connected : Connected?) {
+    private func handleMqttConnection(succeed: Bool, error: Error, token : String, connected : Connected?) {
         if (succeed) {
             self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
             self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
