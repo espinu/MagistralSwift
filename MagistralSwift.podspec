@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
 s.name             = 'MagistralSwift'
-s.version          = '0.6.2'
+s.version          = '0.6.5'
 s.summary          = 'Magistral Swift SDK'
 
 # This description is used to generate tags and improve search results.
@@ -34,8 +34,8 @@ s.source_files = 'MagistralSwift/**/*'
 
 # s.public_header_files = 'Pod/Classes/**/*.h'
 
-s.dependency 'Alamofire', '~> 4.2.0'
+s.dependency 'Alamofire', '~> 4.4.0'
 s.dependency 'SwiftMQTT'
 s.dependency 'CryptoSwift', '~> 0.6.6'
-s.dependency 'SwiftyJSON', '~> 3.1.3'
+s.dependency 'SwiftyJSON', '~> 3.1.4'
 end

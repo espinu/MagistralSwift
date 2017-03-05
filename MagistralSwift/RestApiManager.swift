@@ -123,20 +123,8 @@ open class RestApiManager: NSObject {
     // MARK: Perform a POST Request
     func makeHTTPPostRequest(_ path: String, body: Parameters, onCompletion: @escaping ServiceResponse) {
         
-        let url = URL(string: path)!
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        
-        do {
-            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-        } catch {
-            // No-op
-        }
-        
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        Alamofire
-            .request(urlRequest).responseString { response in
+        Alamofire.request(path, method: .post, parameters: body, encoding: JSONEncoding.default)
+            .responseString { response in
                 switch response.result {
                 case .success:
                     let json: JSON = JSON(data: response.data!);
