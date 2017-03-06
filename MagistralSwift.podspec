@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
 s.name             = 'MagistralSwift'
-s.version          = '0.6.6'
+s.version          = '0.6.7'
 s.summary          = 'Magistral Swift SDK'
 
 # This description is used to generate tags and improve search results.
@@ -22,7 +22,7 @@ s.description      = 'Swift 3 SDK for Magistral Data Streaming Service'
 s.homepage         = 'https://github.com/magistral-io/MagistralSwift'
 s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.author           = { 'roman.kurpatov' => 'roman.kurpatov@magistral.io' }
-s.source           = { :git => 'https://github.com/magistral-io/MagistralSwift.git', :tag => '0.6.6' }
+s.source           = { :git => 'https://github.com/magistral-io/MagistralSwift.git', :tag => '0.6.7' }
 
 s.ios.deployment_target = '9.0'
 

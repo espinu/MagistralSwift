@@ -22,7 +22,12 @@ public struct MagistralEncoding : ParameterEncoding {
     
 }
 
-open class RestApiManager: NSObject {
+public class RestApiManager {
+    
+    let manager = Alamofire.SessionManager.default
+    
+    static let sharedInstance = RestApiManager()
+    private init() {}
     
     enum ResponseType {
         case json
@@ -30,36 +35,35 @@ open class RestApiManager: NSObject {
     }
     
     let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
-    static let sharedInstance = RestApiManager()
-    
-    
     
     func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
 //        debugPrint(
-        Alamofire
-            .request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
+        
+        manager.session.configuration.timeoutIntervalForRequest = 180
+        
+        manager.request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
             .authenticate(user: user, password: password)
-            .validate(statusCode: 200..<300)
-            .validate()
+            .validate(statusCode: 200..<300).validate()
             .responseJSON (queue: queue) { response in
-                
-                guard response.result.isSuccess else {
-                    print("REST CALL ERROR: \(response.result.error)")
-                    onCompletion(JSON.null, response.result.error as NSError?)
-                    return
+                switch response.result {
+                case .success:
+                    DispatchQueue.main.async {
+                        let json: JSON = JSON(data: response.data!);
+                        onCompletion(json , nil)
+                    }
+                case .failure(let error):
+                    onCompletion(JSON.null, error as NSError?)
                 }
-                
-                DispatchQueue.main.async {
-                    let json: JSON = JSON(data: response.data!);
-                    onCompletion(json, nil);
-                }
-        }
+            }
 //        )
         
     }
     
     func makeHTTPGetRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
-        Alamofire
+        
+        manager.session.configuration.timeoutIntervalForRequest = 180
+        
+        manager
             .request(path, method: .get, parameters: parameters)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)

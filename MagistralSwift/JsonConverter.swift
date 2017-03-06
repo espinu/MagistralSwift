@@ -12,6 +12,7 @@ import SwiftyJSON
 public class JsonConverter {
     
     static let sharedInstance = JsonConverter();
+    private init() {}
     
     func handle(json : JSON) throws -> io.magistral.client.data.History {
         

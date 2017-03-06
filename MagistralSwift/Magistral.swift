@@ -32,6 +32,8 @@ public class Magistral : IMagistral {
         self.init(pubKey : pubKey, subKey : subKey, secretKey : secretKey, cipher : "", connected : connected);
     }
     
+    private var commitTimer: Timer!
+    
     public func setHost(host : String) {
         self.host = host;
     }
@@ -55,6 +57,27 @@ public class Magistral : IMagistral {
                 connected!(status, magistral);
             })
         });
+        
+        self.commitTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(commitOffsets), userInfo: nil, repeats: true)
+    }
+    
+    private var shift : [String : [String : [String : String]]] = [ : ];
+    @objc private func commitOffsets() {        
+        if self.shift.isEmpty { return }
+        
+        for (group, offsets) in self.shift {
+            var parameters: Parameters = [ : ]
+            parameters["group"] = group;
+            parameters["offsets"] = offsets;
+            commit(parameters: parameters);
+        }
+        
+        self.shift.removeAll();
+    }
+    
+    private func commit(parameters : Parameters) {
+        let baseURL = "https://" + self.host + "/api/magistral/data/commit"
+        RestApiManager.sharedInstance.makeHTTPPostRequest(baseURL, body: parameters, onCompletion: { _,_ in })
     }
     
     public func index(_ topic: String, channel: Int, group: String, callback: @escaping io.magistral.client.data.index.Callback) throws {
@@ -92,8 +115,7 @@ public class Magistral : IMagistral {
         
         RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { [weak self] json, err in
             do {
-                
-                let messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
+                var messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
                 
                 for m in messages {
                     
@@ -120,8 +142,9 @@ public class Magistral : IMagistral {
                         self?.init_indexes[group]?[m.topic()] = [ : ]
                         self?.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                     }
-                    
                 }
+                messages.removeAll();
+                
                 callback();
             } catch {
                 let eve = Message(topic: "null", channel: 0, msg: [], index: 0, timestamp: 0)
@@ -143,20 +166,21 @@ public class Magistral : IMagistral {
                     if JsonConverter.sharedInstance.isValidJSON(data: dataFromString) {
                         
                         let json = JSON(data: dataFromString)
-                        let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
-                        
-                        var offsets : [ String : [ String : String ]] = [ : ]
-                        
-//                        var parameter : [ String : Any? ] = [ : ]
+                        var messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
                         
                         for m in messages {
                             
-                            if let _ = offsets[m.topic()] {
-                                offsets[m.topic()]?[String(m.channel())] = String(m.index());
-//                                offsets[m.topic()][m.channel()] = m.index() as! [String:Any]
+                            if let _ = self.shift[group] {
+                                if let _ = self.shift[group]?[m.topic()] {
+                                    self.shift[group]?[m.topic()]?[String(m.channel())] = String(m.index())
+                                } else {
+                                    self.shift[group]?[m.topic()] = [ : ]
+                                    self.shift[group]?[m.topic()]?[String(m.channel())] = String(m.index())
+                                }
                             } else {
-                                offsets[m.topic()] = [ : ]
-                                offsets[m.topic()]?[String(m.channel())] = String(m.index());
+                                self.shift[group] = [ : ]
+                                self.shift[group]?[m.topic()] = [ : ]
+                                self.shift[group]?[m.topic()]?[String(m.channel())] = String(m.index())
                             }
                             
                             if let grinxs = self.init_indexes[group] {
@@ -182,46 +206,9 @@ public class Magistral : IMagistral {
                                 self.init_indexes[group]?[m.topic()] = [ : ]
                                 self.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                             }
-                            
-                            /*
-                            if let chixs = self.init_indexes[m.topic()] {
-                                if let ixs = chixs[m.channel()] {
-                                    if m.index() > ixs {
-                                        listener(m, nil)
-                                        self.init_indexes[m.topic()]?[m.channel()] = m.index()
-                                    }
-                                } else {
-                                    listener(m, nil)
-                                    self.init_indexes[m.topic()]?[m.channel()] = m.index()
-                                }
-                            } else {
-                                listener(m, nil)
-                                self.init_indexes[m.topic()] = [ : ]
-                                self.init_indexes[m.topic()]?[m.channel()] = m.index()
-                            }
-                            */
-                         
                         }
                         
-//                        var subTChIJson : [String : AnyObject] = [ : ]
-//                        subTChIJson[m.topic()] =
-                        
-//                        var offsetsJson : [String : Any? ] = [ : ]
-//                        offsetsJson["group"] = group;
-//                        offsetsJson["offsets"] = offsets;
-//                        
-//                        let parameters : Parameters = [
-//                            "group" : "group",
-//                            "offsets" : [
-//                                
-//                            ]
-//                        ];
-                        
-                        var parameters: Parameters = [ : ]
-                        parameters["group"] = group;
-                        parameters["offsets"] = offsets;
-                        
-                        commit(parameters: parameters);
+                        messages.removeAll()
                     }
                 }
             }
@@ -649,15 +636,14 @@ public class Magistral : IMagistral {
         })
     }
     
-    private func commit(parameters : Parameters) {
-        let baseURL = "https://" + self.host + "/api/magistral/data/commit"
-        RestApiManager.sharedInstance.makeHTTPPostRequest(baseURL, body: parameters, onCompletion: { _,_ in })
-    }
-    
     deinit {}
     
     public func close() {
+        commitOffsets();
+        
         self.active = false;
+        self.commitTimer.invalidate();
+        
         mqtt?.removeMessageListeners();
         mqtt?.disconnect();
         mqtt?.delegate = nil
