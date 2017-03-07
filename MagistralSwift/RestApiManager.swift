@@ -24,10 +24,17 @@ public struct MagistralEncoding : ParameterEncoding {
 
 public class RestApiManager {
     
-    let manager = Alamofire.SessionManager.default
+    var manager = Alamofire.SessionManager.default
+    var cookies = HTTPCookieStorage.shared
     
     static let sharedInstance = RestApiManager()
-    private init() {}
+    private init() {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
+        configuration.httpCookieStorage = cookies
+        manager = Alamofire.SessionManager(configuration: configuration)
+        manager.session.configuration.timeoutIntervalForRequest = 180
+    }
     
     enum ResponseType {
         case json
@@ -37,12 +44,11 @@ public class RestApiManager {
     let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
     
     func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
-//        debugPrint(
         
-        manager.session.configuration.timeoutIntervalForRequest = 180
+        let credential = URLCredential(user: user, password: password, persistence: .forSession)
         
         manager.request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
-            .authenticate(user: user, password: password)
+            .authenticate(usingCredential: credential)
             .validate(statusCode: 200..<300).validate()
             .responseJSON (queue: queue) { response in
                 switch response.result {
@@ -55,17 +61,15 @@ public class RestApiManager {
                     onCompletion(JSON.null, error as NSError?)
                 }
             }
-//        )
-        
     }
     
     func makeHTTPGetRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
         
-        manager.session.configuration.timeoutIntervalForRequest = 180
+        let credential = URLCredential(user: user, password: password, persistence: .forSession)
         
         manager
             .request(path, method: .get, parameters: parameters)
-            .authenticate(user: user, password: password)
+            .authenticate(usingCredential: credential)
             .validate(statusCode: 200..<300)
             .validate()
             .responseString { response in
@@ -79,7 +83,7 @@ public class RestApiManager {
     }
     
     func makeHTTPPutRequest(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
-        Alamofire
+        manager
             .request(path, method: .put, parameters: parameters, encoding: URLEncoding.default)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
@@ -95,7 +99,7 @@ public class RestApiManager {
     }
     
     func makeHTTPDeleteRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
-        Alamofire
+        manager
             .request(path, method: .delete, parameters: parameters, encoding: URLEncoding.default)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
@@ -110,7 +114,7 @@ public class RestApiManager {
     }
     
     func makeHTTPPutRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
-        Alamofire
+        manager
             .request(path, method: .put, parameters: parameters, encoding: URLEncoding.default)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
@@ -127,7 +131,7 @@ public class RestApiManager {
     // MARK: Perform a POST Request
     func makeHTTPPostRequest(_ path: String, body: Parameters, onCompletion: @escaping ServiceResponse) {
         
-        Alamofire.request(path, method: .post, parameters: body, encoding: JSONEncoding.default)
+        manager.request(path, method: .post, parameters: body, encoding: JSONEncoding.default)
             .responseString { response in
                 switch response.result {
                 case .success:
