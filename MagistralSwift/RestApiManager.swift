@@ -46,7 +46,7 @@ public class RestApiManager {
     func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
         
         let credential = URLCredential(user: user, password: password, persistence: .forSession)
-        
+        debugPrint(
         manager.request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
             .authenticate(usingCredential: credential)
             .validate(statusCode: 200..<300).validate()
@@ -54,13 +54,14 @@ public class RestApiManager {
                 switch response.result {
                 case .success:
                     DispatchQueue.main.async {
-                        let json: JSON = JSON(data: response.data!);
+                        let json = JSON(response.data!);
                         onCompletion(json , nil)
                     }
                 case .failure(let error):
                     onCompletion(JSON.null, error as NSError?)
                 }
             }
+        )
     }
     
     func makeHTTPGetRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {

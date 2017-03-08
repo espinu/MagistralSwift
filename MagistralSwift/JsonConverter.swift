@@ -18,7 +18,9 @@ public class JsonConverter {
         
         var history : io.magistral.client.data.History;
         
-        if let messages = json["message"].array {
+        if json == JSON.null {
+            history = io.magistral.client.data.History(messages: []);
+        } else if let messages = json["message"].array {
             
             let dumb = Message(topic: "", channel: 0, msg: [UInt8](), index: 0, timestamp: 0)
             

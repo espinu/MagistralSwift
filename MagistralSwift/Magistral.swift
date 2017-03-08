@@ -54,7 +54,7 @@ public class Magistral : IMagistral {
             self?.settings = settings;
             
             self?.initMqtt(token: token, connected: { status, magistral in
-                connected!(status, magistral);
+                connected?(status, magistral);
             })
         });
         
@@ -600,7 +600,12 @@ public class Magistral : IMagistral {
         RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let history : io.magistral.client.data.History = try JsonConverter.sharedInstance.handle(json: json);
-                callback(history, err == nil ? nil : MagistralException.historyInvocationError);
+                if err == nil {
+                    callback(history, nil);
+                } else {
+                    callback(history, MagistralException.historyInvocationError);
+                }
+                
             } catch MagistralException.historyInvocationError {
                 let history = io.magistral.client.data.History(messages: [Message]());
                 callback(history, MagistralException.historyInvocationError)
