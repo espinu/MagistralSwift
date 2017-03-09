@@ -275,6 +275,15 @@ public class Magistral : IMagistral {
             self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
             self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
             self.active = true
+            
+            for (group, topicSubscription) in self.subscription {
+                for (t, channelsSubscription) in topicSubscription {
+                    for ch in channelsSubscription {
+                        self.mqtt?.subscribe(t, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in });
+                    }
+                }
+            }
+            
             connected!(self.active, self);
         }
     }
