@@ -278,6 +278,12 @@ public class Magistral : IMagistral {
             
             for (group, topicSubscription) in self.subscription {
                 for (t, channelsSubscription) in topicSubscription {
+                    if let listenerGroups = self.lstMap[t] {
+                        if let groupListener = listenerGroups[group] {
+                            self.read(t, group: group, channels: channelsSubscription, listener: groupListener, callback: {});
+                        }
+                    }
+                    
                     for ch in channelsSubscription {
                         self.mqtt?.subscribe(t, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in });
                     }
@@ -714,7 +720,7 @@ public class Magistral : IMagistral {
     deinit {}
     
     public func close() {
-        commitOffsets();
+        self.commitOffsets();
         
         self.active = false;
         self.commitTimer.invalidate();
