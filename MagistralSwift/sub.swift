@@ -25,19 +25,19 @@ public extension io.magistral.client.sub {
             self._endPoints = endPoints;
         }
         
-        func endPoints() -> [ String ] {
+        public func endPoints() -> [ String ] {
             return self._endPoints;
         }
         
-        func group() -> String {
+        public func group() -> String {
             return self._group;
         }
         
-        func topic() -> String {
+        public func topic() -> String {
             return self._topic;
         }
         
-        func channel() -> Int {
+        public func channel() -> Int {
             return self._channel;
         }
     }

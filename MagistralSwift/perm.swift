@@ -20,11 +20,11 @@ public extension io.magistral.client.perm {
             self._permissions = perms;
         }
         
-        func topic() -> String {
+        public func topic() -> String {
             return self._topic;
         }
         
-        func channels() -> Set<Int> {
+        public func channels() -> Set<Int> {
             var chs : Set<Int> = Set<Int>();
             for c in self._permissions.keys {
                 chs.insert(c);
@@ -32,7 +32,7 @@ public extension io.magistral.client.perm {
             return chs;
         }
         
-        func readable(_ ch : Int) -> Bool {
+        public func readable(_ ch : Int) -> Bool {
             if let val = self._permissions[ch] {
                 let readable : Bool = val.0;
                 return readable;
@@ -41,7 +41,7 @@ public extension io.magistral.client.perm {
             }
         }
         
-        func writable(_ ch : Int) -> Bool {
+        public func writable(_ ch : Int) -> Bool {
             if let val = self._permissions[ch] {
                 let writable : Bool = val.1;
                 return writable;

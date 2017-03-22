@@ -18,6 +18,8 @@ public enum MagistralException: Error {
     case conversionError
     
     case publishError
+    
+    case groupAlreadySubscribedOnChannel
     case subscriptionError
     case unsubscriptionError
    

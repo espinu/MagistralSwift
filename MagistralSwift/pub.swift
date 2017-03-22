@@ -20,11 +20,11 @@ public extension io.magistral.client.pub {
             self._channel = channel;
         }
         
-        func topic() -> String {
+        public func topic() -> String {
             return self._topic;
         }
         
-        func channel() -> Int {
+        public func channel() -> Int {
             return self._channel;
         }
     }

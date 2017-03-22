@@ -23,7 +23,9 @@ public class Magistral : IMagistral {
     
     private var mqtt : MqttClient?;
     
-    private var init_indexes : [String : [Int : UInt64]]  = [ : ];
+    private var subscription : [String : [String : [Int]]] = [ : ];
+
+    private var init_indexes : [String : [String : [Int : UInt64]]]  = [ : ];
     private var settings : [String : [[String : String]]] = [ : ];
     
     public typealias Connected = (Bool, Magistral) -> Void
@@ -31,6 +33,8 @@ public class Magistral : IMagistral {
     convenience init(pubKey : String, subKey : String, secretKey : String, connected : Connected?) {
         self.init(pubKey : pubKey, subKey : subKey, secretKey : secretKey, cipher : "", connected : connected);
     }
+    
+    private var commitTimer: Timer!
     
     public func setHost(host : String) {
         self.host = host;
@@ -48,13 +52,34 @@ public class Magistral : IMagistral {
         
         if (cipher != "") { self.cipher = cipher; }
         
-        self.connectionPoints(callback: { token, settings in
-            self.settings = settings;
+        self.connectionPoints(callback: { [weak self] token, settings in
+            self?.settings = settings;
             
-            self.initMqtt(token: token, connected: { status, magistral in
-                connected!(status, magistral);
+            self?.initMqtt(token: token, connected: { status, magistral in
+                connected?(status, magistral);
             })
         });
+        
+        self.commitTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(commitOffsets), userInfo: nil, repeats: true)
+    }
+    
+    private var shift : [String : [String : [String : String]]] = [ : ];
+    @objc private func commitOffsets() {        
+        if self.shift.isEmpty { return }
+        
+        for (group, offsets) in self.shift {
+            var parameters: Parameters = [ : ]
+            parameters["group"] = group;
+            parameters["offsets"] = offsets;
+            commit(parameters: parameters);
+        }
+        
+        self.shift.removeAll();
+    }
+    
+    private func commit(parameters : Parameters) {
+        let baseURL = "https://" + self.host + "/api/magistral/data/commit"
+        RestApiManager.sharedInstance.makeHTTPPostRequest(baseURL, body: parameters, onCompletion: { _,_ in })
     }
     
     public func index(_ topic: String, channel: Int, group: String, callback: @escaping io.magistral.client.data.index.Callback) throws {
@@ -90,28 +115,37 @@ public class Magistral : IMagistral {
             "channel": channels
         ]
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { [weak self] json, err in
             do {
-                
-                let messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
+                var messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
                 
                 for m in messages {
-                    
-                    if let chixs = self.init_indexes[m.topic()] {
-                        if let ixs = chixs[m.channel()] {
-                            if m.index() > ixs {
-                                listener(m, nil)
-                                self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                    if let grinxs = self?.init_indexes[group] {
+                        
+                        if let chixs = grinxs[m.topic()] {
+                            if let ixs = chixs[m.channel()] {
+                                if m.index() > ixs {
+                                    self?.triggerGroupListener(group: group, listener: listener, message: m);
+                                    self?.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
+                                }
+                            } else {
+                                self?.triggerGroupListener(group: group, listener: listener, message: m);
+                                self?.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                             }
                         } else {
-                            listener(m, nil)
-                            self.init_indexes[m.topic()]?[m.channel()] = m.index()                                }
+                            self?.triggerGroupListener(group: group, listener: listener, message: m);
+                            self?.init_indexes[group]?[m.topic()] = [ : ]
+                            self?.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
+                        }
+                        
                     } else {
-                        listener(m, nil)
-                        self.init_indexes[m.topic()] = [ : ]
-                        self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                        self?.init_indexes[group] = [ : ]
+                        self?.init_indexes[group]?[m.topic()] = [ : ]
+                        self?.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                     }
                 }
+                messages.removeAll();
+                
                 callback();
             } catch {
                 let eve = Message(topic: "null", channel: 0, msg: [], index: 0, timestamp: 0)
@@ -121,39 +155,76 @@ public class Magistral : IMagistral {
         })
     }
     
-    private func handleMqttMessage(m : Message) {
-        if let groupListeners = self.lstMap[m.topic()] {
-            for (_, listener) in groupListeners {
+    private func notifyListeners(topic: String, channel : Int, messages : [Message]) {
+        
+        if let groupListeners = self.lstMap[topic] {
+            for (group, listener) in groupListeners {
                 
-                let msg = String(bytes: m.body(), encoding: String.Encoding.utf8);
-                
-                if let dataFromString = msg?.data(using: .utf8, allowLossyConversion: true) {
+                for m in messages {
                     
-                    if JsonConverter.sharedInstance.isValidJSON(data: dataFromString) {
+                    if let _ = self.shift[group] {
+                        if let _ = self.shift[group]?[m.topic()] {
+                            self.shift[group]?[m.topic()]?[String(m.channel())] = String(m.index())
+                        } else {
+                            self.shift[group]?[m.topic()] = [ : ]
+                            self.shift[group]?[m.topic()]?[String(m.channel())] = String(m.index())
+                        }
+                    } else {
+                        self.shift[group] = [ : ]
+                        self.shift[group]?[m.topic()] = [ : ]
+                        self.shift[group]?[m.topic()]?[String(m.channel())] = String(m.index())
+                    }
+                    
+                    if let grinxs = self.init_indexes[group] {
                         
-                        let json = JSON(data: dataFromString)
-                        let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
-                        
-                        for m in messages {
-                            
-                            if let chixs = self.init_indexes[m.topic()] {
-                                if let ixs = chixs[m.channel()] {
-                                    if m.index() > ixs {
-                                        listener(m, nil)
-                                        self.init_indexes[m.topic()]?[m.channel()] = m.index()
-                                    }
-                                } else {
-                                    listener(m, nil)
-                                    self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                        if let chixs = grinxs[m.topic()] {
+                            if let ixs = chixs[m.channel()] {
+                                if m.index() > ixs {
+                                    self.triggerGroupListener(group: group, listener: listener, message: m);
+                                    self.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                                 }
                             } else {
-                                listener(m, nil)
-                                self.init_indexes[m.topic()] = [ : ]
-                                self.init_indexes[m.topic()]?[m.channel()] = m.index()
+                                self.triggerGroupListener(group: group, listener: listener, message: m);
+                                self.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                             }
+                        } else {
+                            self.triggerGroupListener(group: group, listener: listener, message: m);
+                            self.init_indexes[group]?[m.topic()] = [ : ]
+                            self.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                         }
+                        
+                    } else {
+                        self.init_indexes[group] = [ : ]
+                        self.init_indexes[group]?[m.topic()] = [ : ]
+                        self.init_indexes[group]?[m.topic()]?[m.channel()] = m.index()
                     }
                 }
+            }
+        }
+    }
+    
+    private func triggerGroupListener(group : String, listener : io.magistral.client.sub.NetworkListener, message : Message) {        
+        if let groupSub = self.subscription[group] {
+            if let topicSub = groupSub[message.topic()] {
+                if topicSub.contains(message.channel()) {                    
+                    listener(message, nil)
+                }
+            }
+        }
+    }
+    
+    private func handleMqttMessage(m : Message) {
+        
+        let msg = String(bytes: m.body(), encoding: String.Encoding.utf8);
+        
+        if let dataFromString = msg?.data(using: .utf8, allowLossyConversion: true) {
+            
+            if JsonConverter.sharedInstance.isValidJSON(data: dataFromString) {
+                
+                let json = JSON(data: dataFromString)
+                let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
+                
+                notifyListeners(topic: m.topic(), channel: m.channel(), messages: messages)
             }
         }
     }
@@ -168,40 +239,62 @@ public class Magistral : IMagistral {
         mqtt?.lastWillMessage = MQTTPubMsg(topic: "presence/" + self.pubKey + "/" + token, payload: Data(bytes: [0]), retain: true, QoS: MQTTQoS.atLeastOnce);
         mqtt?.delegate = mqtt;
         
-        mqtt?.addMessageListener({ ref, message in
-            self.handleMqttMessage(m: message);
+        mqtt?.addMessageListener({ [weak self] ref, message in
+            self?.handleMqttMessage(m: message);
         });
         
-        mqtt?.connect(completion: { mqtt_connected, error in
-            if (mqtt_connected) {
-                self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
-                self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
-                self.active = true
-                connected!(self.active, self);
-            }
-        }, disconnect: { session in
-            if (self.active) {
-                print("Connection dropped -> reconnection in 5 sec.")                
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-                    session.connect(completion: { mqtt_connected, error in
-                        if (mqtt_connected) {
-                            self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
-                            self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
-                            self.active = true
-                            connected!(self.active, self);
-                        }
-                    });
-                }
-            }            
-        }, socketerr: { session in
-            if (self.active) {
-                print("Socket error")
-            }
+        mqtt?.connect(completion: { [weak self] mqtt_connected, error in
+            self?.handleMqttConnection(succeed: mqtt_connected, error: error,token : token, connected : connected)
+        }, disconnect: { [weak self] session in
+            self?.handleMqttDisconnect(session: session, token: token, connected: connected)
+        }, socketerr: { [weak self] session in
+            self?.handleMqttSocketError()
         })
+        
+    }
+    
+    private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+        if (self.active) {
+            print("Connection dropped -> reconnection in 5 sec.")
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+                session.connect(completion: { [weak self] mqtt_connected, error in
+                    self?.handleMqttConnection(succeed: mqtt_connected, error: error, token: token, connected: connected)
+                });
+            }
+        }
+    }
+    
+    private func handleMqttSocketError() {
+        if (self.active) {
+            print("Socket error")
+        }
+    }
+    
+    private func handleMqttConnection(succeed: Bool, error: Error, token : String, connected : Connected?) {
+        if (succeed) {
+            self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
+            self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
+            self.active = true
+            
+            for (group, topicSubscription) in self.subscription {
+                for (t, channelsSubscription) in topicSubscription {
+                    if let listenerGroups = self.lstMap[t] {
+                        if let groupListener = listenerGroups[group] {
+                            self.read(t, group: group, channels: channelsSubscription, listener: groupListener, callback: {});
+                        }
+                    }
+                    
+                    for ch in channelsSubscription {
+                        self.mqtt?.subscribe(t, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in });
+                    }
+                }
+            }
+            
+            connected!(self.active, self);
+        }
     }
     
     private func connectionPoints(callback : @escaping (_ token : String, _ settings : [ String : [[String : String]] ]) -> Void) {
-        
         let baseURL = "https://" + self.host + "/api/magistral/net/connectionPoints"
         
         let user = self.pubKey + "|" + self.subKey;
@@ -246,13 +339,14 @@ public class Magistral : IMagistral {
 
         let ch = (channel < -1) ? -1 : channel;
         
-        try self.topics { smeta, error in
+        try self.topics { [weak self] smeta, error in
             
             if error != nil {
                 callback?(subMeta, error);
             }
             
             for meta in smeta {
+                
                 if topic != meta.topic() { continue; }
                 
                 if channel == -1 && meta.channels().count == 0 {
@@ -263,23 +357,51 @@ public class Magistral : IMagistral {
                     return;
                 } else {
                     
-                    if ch != -1 {
-                        self.read(topic, group: group, channels: [ch], listener: listener, callback: {
-                            self.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
-                                callback?(meta, err)
-                            })
-                        });
-                    } else {
-                        var xx : [Int] = []
-                        for _ch in meta.channels() {
-                            xx.append(_ch)
-                        }
-                        self.read(topic, group: group, channels: xx, listener: listener, callback: {
-                            self.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
-                                callback?(meta, err)
-                            })
-                        });
+                    var allChannels : [Int] = []
+                    for _ch in meta.channels() {
+                        allChannels.append(_ch)
                     }
+                    
+                    if let groupSub = self?.subscription[group] {
+                        if let topicSub = groupSub[topic] {
+                            if ch == -1 {
+                                for tch in allChannels {
+                                    if topicSub.contains(tch) {
+                                        callback?(subMeta, MagistralException.groupAlreadySubscribedOnChannel)
+                                        return;
+                                    }
+                                }
+                            } else {
+                                if topicSub.contains(channel) {
+                                    callback?(subMeta, MagistralException.groupAlreadySubscribedOnChannel)
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    
+                    let chs = (ch == -1) ? allChannels : [ch]
+                    
+                    self?.mqtt?.subscribe(topic, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in
+                        if err == nil {
+                            if let groupSub = self?.subscription[group] {
+                                if let _ = groupSub[topic] {} else {
+                                    self?.subscription[group]?[topic] = []
+                                }
+                                for ch in chs {
+                                    self?.subscription[group]?[topic]?.append(ch)
+                                }
+                            } else {
+                                var ts : [String : [Int]] = [ : ]
+                                ts[topic] = chs
+                                self?.subscription[group] = ts
+                            }
+                        }
+                        
+                        self?.read(topic, group: group, channels: chs, listener: listener, callback: {});
+                        
+                        callback?(meta, err)
+                    })
                 }
                 return;
             }
@@ -298,17 +420,36 @@ public class Magistral : IMagistral {
     
     public func unsubscribe(_ topic : String, callback : io.magistral.client.sub.Callback?) throws {
         let hts = topic.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ".", with: "-");
+        
+        self.removeSubscription(topic: topic, channel: -1);
         self.mqtt?.unsubscribe(self.subKey + "/" + hts, callback: { meta, err in
             callback?(io.magistral.client.sub.SubMeta(topic: meta.topic(), channel: meta.channel(), group: meta.group(), endPoints: meta.endPoints()), err);
         })
     }
     
     public func unsubscribe(_ topic : String, channel : Int, callback : io.magistral.client.sub.Callback?) throws {
-        var hts = self.subKey + "/" + topic.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ".", with: "-");
+        let hts = self.subKey + "/" + topic.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ".", with: "-");
         
+        self.removeSubscription(topic: topic, channel: channel);
         self.mqtt?.unsubscribe(hts, channel: channel, callback: { meta, err in
             callback?(io.magistral.client.sub.SubMeta(topic: meta.topic(), channel: meta.channel(), group: meta.group(), endPoints: meta.endPoints()), err);
         })
+    }
+    
+    private func removeSubscription(topic : String, channel : Int) {
+        for (group, topicSubscription) in self.subscription {
+            for (t, channelsSubscription) in topicSubscription {
+                if (t == topic){
+                    if channel >= 0 {
+                        if let index = channelsSubscription.index(of: channel) {
+                            self.subscription[group]?[topic]?.remove(at: index)
+                        }
+                    } else {
+                        self.subscription[group]?[topic]?.removeAll()
+                    }
+                }
+            }
+        }
     }
     
 //  TOPICS
@@ -432,12 +573,14 @@ public class Magistral : IMagistral {
         
         let auth = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPPutRequestText(baseURL, parameters: params, user: auth, password : self.secretKey, onCompletion: { text, err in
+        let secretKey = self.secretKey
+        let host = self.host
+        RestApiManager.sharedInstance.makeHTTPPutRequestText(baseURL, parameters: params, user: auth, password : secretKey, onCompletion: { text, err in
             if (callback != nil && err == nil) {
                 
-                let baseURL = "https://" + self.host + "/api/magistral/net/user_permissions"
+                let baseURL = "https://" + host + "/api/magistral/net/user_permissions"
                 
-                RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : self.secretKey, onCompletion: { json, err in
+                RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
                     do {
                         let permissions : [io.magistral.client.perm.PermMeta] = try JsonConverter.sharedInstance.handle(json: json);
                         callback?(permissions, err == nil ? nil : MagistralException.permissionFetchError);
@@ -466,13 +609,14 @@ public class Magistral : IMagistral {
         }
         
         let auth = self.pubKey + "|" + self.subKey;
-        
-        RestApiManager.sharedInstance.makeHTTPDeleteRequestText(baseURL, parameters: params, user: auth, password: self.secretKey) { text, err in
+        let host = self.host
+        let secretKey = self.secretKey
+        RestApiManager.sharedInstance.makeHTTPDeleteRequestText(baseURL, parameters: params, user: auth, password: secretKey) { text, err in
             if (callback != nil && err == nil) {
                 
-                let baseURL = "https://" + self.host + "/api/magistral/net/user_permissions"
+                let baseURL = "https://" + host + "/api/magistral/net/user_permissions"
                 
-                RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : self.secretKey, onCompletion: { json, err in
+                RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
                     do {
                         let permissions : [io.magistral.client.perm.PermMeta] = try JsonConverter.sharedInstance.handle(json: json);
                         callback?(permissions, err == nil ? nil : MagistralException.permissionFetchError);
@@ -532,7 +676,12 @@ public class Magistral : IMagistral {
         RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let history : io.magistral.client.data.History = try JsonConverter.sharedInstance.handle(json: json);
-                callback(history, err == nil ? nil : MagistralException.historyInvocationError);
+                if err == nil {
+                    callback(history, nil);
+                } else {
+                    callback(history, MagistralException.historyInvocationError);
+                }
+                
             } catch MagistralException.historyInvocationError {
                 let history = io.magistral.client.data.History(messages: [Message]());
                 callback(history, MagistralException.historyInvocationError)
@@ -568,18 +717,16 @@ public class Magistral : IMagistral {
         })
     }
     
-    deinit {
-        self.active = false;
-        if (mqtt != nil) {
-            mqtt?.removeMessageListeners();
-            mqtt?.disconnect();
-        }
-    }
+    deinit {}
     
     public func close() {
+        self.commitOffsets();
+        
         self.active = false;
+        self.commitTimer.invalidate();
+        
         mqtt?.removeMessageListeners();
         mqtt?.disconnect();
-        exit(0)
+        mqtt?.delegate = nil
     }
 }

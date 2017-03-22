@@ -33,19 +33,19 @@ public extension io.magistral.client.data.index {
             self._index = index;
         }
         
-        func topic() -> String {
+        public func topic() -> String {
             return self._topic;
         }
         
-        func channel() -> Int {
+        public func channel() -> Int {
             return self._channel;
         }
         
-        func group() -> String {
+        public func group() -> String {
             return self._group;
         }
         
-        func index() -> UInt64 {
+        public func index() -> UInt64 {
             return self._index;
         }
     }

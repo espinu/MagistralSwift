@@ -22,7 +22,19 @@ public struct MagistralEncoding : ParameterEncoding {
     
 }
 
-open class RestApiManager: NSObject {
+public class RestApiManager {
+    
+    var manager = Alamofire.SessionManager.default
+    var cookies = HTTPCookieStorage.shared
+    
+    static let sharedInstance = RestApiManager()
+    private init() {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
+        configuration.httpCookieStorage = cookies
+        manager = Alamofire.SessionManager(configuration: configuration)
+        manager.session.configuration.timeoutIntervalForRequest = 180
+    }
     
     enum ResponseType {
         case json
@@ -30,38 +42,35 @@ open class RestApiManager: NSObject {
     }
     
     let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
-    static let sharedInstance = RestApiManager()
-    
-    
     
     func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
-//        debugPrint(
-        Alamofire
-            .request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
-            .authenticate(user: user, password: password)
-            .validate(statusCode: 200..<300)
-            .validate()
-            .responseJSON (queue: queue) { response in
-                
-                guard response.result.isSuccess else {
-                    print("REST CALL ERROR: \(response.result.error)")
-                    onCompletion(JSON.null, response.result.error as NSError?)
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    let json: JSON = JSON(data: response.data!);
-                    onCompletion(json, nil);
-                }
-        }
-//        )
         
+        let credential = URLCredential(user: user, password: password, persistence: .forSession)
+//        debugPrint(
+        manager.request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
+            .authenticate(usingCredential: credential)
+            .validate(statusCode: 200..<300).validate()
+            .responseJSON (queue: queue) { response in
+                switch response.result {
+                case .success:
+                    DispatchQueue.main.async {
+                        let json = JSON(response.data!);
+                        onCompletion(json , nil)
+                    }
+                case .failure(let error):
+                    onCompletion(JSON.null, error as NSError?)
+                }
+            }
+//        )
     }
     
     func makeHTTPGetRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
-        Alamofire
+        
+        let credential = URLCredential(user: user, password: password, persistence: .forSession)
+        
+        manager
             .request(path, method: .get, parameters: parameters)
-            .authenticate(user: user, password: password)
+            .authenticate(usingCredential: credential)
             .validate(statusCode: 200..<300)
             .validate()
             .responseString { response in
@@ -75,7 +84,7 @@ open class RestApiManager: NSObject {
     }
     
     func makeHTTPPutRequest(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
-        Alamofire
+        manager
             .request(path, method: .put, parameters: parameters, encoding: URLEncoding.default)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
@@ -91,7 +100,7 @@ open class RestApiManager: NSObject {
     }
     
     func makeHTTPDeleteRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
-        Alamofire
+        manager
             .request(path, method: .delete, parameters: parameters, encoding: URLEncoding.default)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
@@ -106,7 +115,7 @@ open class RestApiManager: NSObject {
     }
     
     func makeHTTPPutRequestText(_ path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponseText) {
-        Alamofire
+        manager
             .request(path, method: .put, parameters: parameters, encoding: URLEncoding.default)
             .authenticate(user: user, password: password)
             .validate(statusCode: 200..<300)
@@ -123,20 +132,8 @@ open class RestApiManager: NSObject {
     // MARK: Perform a POST Request
     func makeHTTPPostRequest(_ path: String, body: Parameters, onCompletion: @escaping ServiceResponse) {
         
-        let url = URL(string: path)!
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        
-        do {
-            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-        } catch {
-            // No-op
-        }
-        
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        Alamofire
-            .request(urlRequest).responseString { response in
+        manager.request(path, method: .post, parameters: body, encoding: JSONEncoding.default)
+            .responseString { response in
                 switch response.result {
                 case .success:
                     let json: JSON = JSON(data: response.data!);

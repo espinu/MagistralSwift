@@ -18,7 +18,7 @@ public extension io.magistral.client.data {
             self._messages = messages;
         }
         
-        func getMessages() -> [Message] {
+        public func getMessages() -> [Message] {
             return self._messages;
         }
     }
