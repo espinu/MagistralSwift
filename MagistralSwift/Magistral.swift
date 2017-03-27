@@ -55,9 +55,9 @@ public class Magistral : IMagistral {
         self.connectionPoints(callback: { [weak self] token, settings in
             self?.settings = settings;
             
-            self?.initMqtt(token: token, connected: { status, magistral in
+            self?.initMqtt(token: token) { status, magistral in
                 connected?(status, magistral);
-            })
+            }
         });
         
         self.commitTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(commitOffsets), userInfo: nil, repeats: true)
@@ -289,9 +289,8 @@ public class Magistral : IMagistral {
                     }
                 }
             }
-            
-            connected!(self.active, self);
         }
+        connected!(succeed, self);
     }
     
     private func connectionPoints(callback : @escaping (_ token : String, _ settings : [ String : [[String : String]] ]) -> Void) {
