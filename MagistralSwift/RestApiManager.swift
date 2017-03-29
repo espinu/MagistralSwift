@@ -41,7 +41,7 @@ public class RestApiManager {
         case text
     }
     
-    let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
+//    let queue = DispatchQueue(label: "io.magistral.response-queue", qos: .utility, attributes: [.concurrent])
     
     func makeHTTPGetRequest(path: String, parameters : Parameters, user : String, password : String, onCompletion: @escaping ServiceResponse) {
         
@@ -50,13 +50,11 @@ public class RestApiManager {
         manager.request(path, method: .get, parameters: parameters, encoding: MagistralEncoding.init())
             .authenticate(usingCredential: credential)
             .validate(statusCode: 200..<300).validate()
-            .responseJSON (queue: queue) { response in
+            .responseJSON { response in
                 switch response.result {
                 case .success:
-                    DispatchQueue.main.async {
-                        let json = JSON(response.data!);
-                        onCompletion(json , nil)
-                    }
+                    let json = JSON(response.data!);
+                    onCompletion(json , nil)
                 case .failure(let error):
                     onCompletion(JSON.null, error as NSError?)
                 }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2ED364AEA72B27B0FE00C154 /* Pods_MagistralSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2E871786EBEA86C0A16F10 /* Pods_MagistralSwift.framework */; };
 		400BE2FA1D51055C00862EEC /* MagistralSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 400BE2F91D51055C00862EEC /* MagistralSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		400BE3111D51058200862EEC /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 400BE3101D51058200862EEC /* Cartfile */; };
 		400BE3131D51058A00862EEC /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 400BE3121D51058A00862EEC /* Podfile */; };
@@ -81,7 +80,6 @@
 		40D82CC41D547DE20094EE2D /* MqttClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
 		52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
 		6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.debug.xcconfig"; sourceTree = "<group>"; };
-		FA2E871786EBEA86C0A16F10 /* Pods_MagistralSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MagistralSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +90,6 @@
 				40B5357C1DC23D0E006564C8 /* Alamofire.framework in Frameworks */,
 				40B5357E1DC23D0E006564C8 /* SwiftMQTT.framework in Frameworks */,
 				40B5357F1DC23D0E006564C8 /* SwiftyJSON.framework in Frameworks */,
-				2ED364AEA72B27B0FE00C154 /* Pods_MagistralSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +113,6 @@
 				406F25851D91735200F4D65F /* SwiftyJSON.framework */,
 				405600B81D90ACE000A57037 /* SwiftMQTT.framework */,
 				400BE32E1D5107D300862EEC /* Alamofire.framework */,
-				FA2E871786EBEA86C0A16F10 /* Pods_MagistralSwift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
