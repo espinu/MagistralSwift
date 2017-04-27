@@ -28,6 +28,8 @@ public class Magistral : IMagistral {
     private var init_indexes : [String : [String : [Int : UInt64]]]  = [ : ];
     private var settings : [String : [[String : String]]] = [ : ];
     
+    private var tokenExp : [String : Int64] = [ : ];
+    
     public typealias Connected = (Bool, Magistral) -> Void
     
     convenience init(pubKey : String, subKey : String, secretKey : String, connected : Connected?) {
@@ -44,6 +46,11 @@ public class Magistral : IMagistral {
         self.cipher = cipher;
     }
     
+    private func currentTimeMillis() -> Int64 {
+        let nowDouble = NSDate().timeIntervalSince1970
+        return Int64(nowDouble * 1000)
+    }
+    
     public required init(pubKey : String, subKey : String, secretKey : String, cipher : String, connected : Connected? ) {
         
         self.pubKey = pubKey;
@@ -54,6 +61,7 @@ public class Magistral : IMagistral {
         
         self.connectionPoints(callback: { [weak self] token, settings in
             self?.settings = settings;
+            self?.tokenExp[token] = self?.currentTimeMillis();
             
             self?.initMqtt(token: token) { status, magistral in
                 connected?(status, magistral);
@@ -255,11 +263,24 @@ public class Magistral : IMagistral {
     
     private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
         if (self.active) {
-            print("Connection dropped -> reconnection in 5 sec.")
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-                session.connect(completion: { [weak self] mqtt_connected, error in
-                    self?.handleMqttConnection(succeed: mqtt_connected, error: error, token: token, connected: connected)
+            
+            let ts : Int64 = self.tokenExp[token]!;
+            
+            if (self.currentTimeMillis() - ts > 3600 * 1000) {
+                self.connectionPoints(callback: { [weak self] token, settings in
+                    self?.settings = settings;
+                    self?.tokenExp[token] = self?.currentTimeMillis();
+                    
+                    self?.initMqtt(token: token) { status, magistral in
+                    }
                 });
+            } else {
+                print("Connection dropped -> reconnection in 5 sec.")
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+                    session.connect(completion: { [weak self] mqtt_connected, error in
+                        self?.handleMqttConnection(succeed: mqtt_connected, error: error, token: token, connected: connected)
+                    });
+                }
             }
         }
     }
