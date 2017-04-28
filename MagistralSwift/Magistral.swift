@@ -261,7 +261,7 @@ public class Magistral : IMagistral {
     }
     
     private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
-        self?.connected = false;
+        self.connected = false;
         if (self.active) {
             if (tokenExp == 0 || self.currentTimeMillis() - tokenExp > 300 * 1000) {
                 self.connectionPoints(callback: { [weak self] t, settings in
@@ -294,7 +294,7 @@ public class Magistral : IMagistral {
     }
     
     private func handleMqttConnection(succeed: Bool, error: Error, token : String, connected : Connected?) {
-        self?.connected = succeed;
+        self.connected = succeed;
         
         if (succeed) {
             self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
