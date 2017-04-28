@@ -51,7 +51,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'MagistralSwift', '~> 0.7.9'
+    pod 'MagistralSwift', '~> 0.7.10'
 end
 ```
 
