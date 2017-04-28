@@ -251,10 +251,8 @@ public class Magistral : IMagistral {
         });
         
         mqtt?.connect(completion: { [weak self] mqtt_connected, error in
-            self?.connected = true;
             self?.handleMqttConnection(succeed: mqtt_connected, error: error, token : token, connected : connected)
         }, disconnect: { [weak self] session in
-            self?.connected = false;
             self?.handleMqttDisconnect(session: session, token: token, connected: connected)
         }, socketerr: { [weak self] session in
             self?.handleMqttSocketError()
@@ -263,8 +261,8 @@ public class Magistral : IMagistral {
     }
     
     private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+        self?.connected = false;
         if (self.active) {
-            
             if (tokenExp == 0 || self.currentTimeMillis() - tokenExp > 300 * 1000) {
                 self.connectionPoints(callback: { [weak self] t, settings in
                     self?.settings = settings;
@@ -275,7 +273,7 @@ public class Magistral : IMagistral {
                     }
                 });
             } else {
-                tryReconnect(delay: 5, session: session, token: token, connected: connected);
+                tryReconnect(delay: 2, session: session, token: token, connected: connected);
             }
         }
     }
@@ -296,9 +294,12 @@ public class Magistral : IMagistral {
     }
     
     private func handleMqttConnection(succeed: Bool, error: Error, token : String, connected : Connected?) {
+        self?.connected = succeed;
+        
         if (succeed) {
             self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
             self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
+            
             self.active = true
             
             for (group, topicSubscription) in self.subscription {

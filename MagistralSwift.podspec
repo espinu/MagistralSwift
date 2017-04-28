@@ -22,7 +22,7 @@ s.description      = 'Swift 3 SDK for Magistral Data Streaming Service'
 s.homepage         = 'https://github.com/magistral-io/MagistralSwift'
 s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.author           = { 'roman.kurpatov' => 'roman.kurpatov@magistral.io' }
-s.source           = { :git => 'https://github.com/magistral-io/MagistralSwift.git', :tag => '0.7.8' }
+s.source           = { :git => 'https://github.com/magistral-io/MagistralSwift.git', :tag => '0.7.9' }
 
 s.ios.deployment_target = '9.0'
 
