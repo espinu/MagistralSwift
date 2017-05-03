@@ -89,8 +89,12 @@ public class RestApiManager {
             .responseString { response in
                 switch response.result {
                     case .success:
-                        let json: JSON = JSON(data: response.data!);
-                        onCompletion(json , nil)
+                        do {
+                            let json: JSON = try JSON(data: response.data!);
+                            onCompletion(json , nil)
+                        } catch {
+                            onCompletion("", MagistralException.conversionError as NSError?)
+                        }
                     case .failure(let error):
                         onCompletion("", error as NSError?)
                 }
@@ -134,8 +138,12 @@ public class RestApiManager {
             .responseString { response in
                 switch response.result {
                 case .success:
-                    let json: JSON = JSON(data: response.data!);
-                    onCompletion(json , nil)
+                    do {
+                        let json: JSON = try JSON(data: response.data!);
+                        onCompletion(json , nil)
+                    } catch {
+                        onCompletion("", MagistralException.conversionError as NSError?)
+                    }
                 case .failure(let error):
                     onCompletion("", error as NSError?)
                 }

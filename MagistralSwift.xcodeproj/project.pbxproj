@@ -23,6 +23,7 @@
 		400BE32D1D5105A800862EEC /* sub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3201D5105A800862EEC /* sub.swift */; };
 		400BE33A1D5107E600862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
 		40137B601D912DFE00A88D6B /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
+		40217BB71EBA0E5C0070566F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40217BB61EBA0E5C0070566F /* ViewController.swift */; };
 		40259EEA1D51CCED004F711F /* perm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40259EE91D51CCED004F711F /* perm.swift */; };
 		405600BD1D90AF1400A57037 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405600BC1D90AF1400A57037 /* main.swift */; };
 		406F25871D91739800F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
@@ -68,6 +69,7 @@
 		400BE31F1D5105A800862EEC /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		400BE3201D5105A800862EEC /* sub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sub.swift; sourceTree = "<group>"; };
 		400BE32E1D5107D300862EEC /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		40217BB61EBA0E5C0070566F /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		40259EE91D51CCED004F711F /* perm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = perm.swift; sourceTree = "<group>"; };
 		405600B81D90ACE000A57037 /* SwiftMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftMQTT.framework; path = Carthage/Build/iOS/SwiftMQTT.framework; sourceTree = "<group>"; };
 		405600BC1D90AF1400A57037 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -78,8 +80,8 @@
 		40C9ACB21E153C23001E70B1 /* index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = index.swift; sourceTree = "<group>"; };
 		40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagistralSwiftTests.swift; sourceTree = "<group>"; };
 		40D82CC41D547DE20094EE2D /* MqttClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MqttClient.swift; sourceTree = "<group>"; };
-		52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
-		6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.debug.xcconfig"; sourceTree = "<group>"; };
+		428507ABB402974D40C22D32 /* Pods-MagistralSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.debug.xcconfig"; sourceTree = "<group>"; };
+		E8CD3C98306DD5EC1162770A /* Pods-MagistralSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagistralSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,8 +129,8 @@
 				400BE2F81D51055C00862EEC /* MagistralSwift */,
 				400BE3041D51055C00862EEC /* MagistralSwiftTests */,
 				400BE2F71D51055C00862EEC /* Products */,
-				DE6101276D3C7CF09191120D /* Pods */,
 				0BE48C7034C003E48D8BB1A5 /* Frameworks */,
+				6C99CBAB98A5FECF4853B3C4 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -163,6 +165,7 @@
 		400BE3041D51055C00862EEC /* MagistralSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				40217BB61EBA0E5C0070566F /* ViewController.swift */,
 				400BE3071D51055C00862EEC /* Info.plist */,
 				40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */,
 			);
@@ -239,11 +242,11 @@
 			name = io.magistral.client.perm;
 			sourceTree = "<group>";
 		};
-		DE6101276D3C7CF09191120D /* Pods */ = {
+		6C99CBAB98A5FECF4853B3C4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */,
-				52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */,
+				428507ABB402974D40C22D32 /* Pods-MagistralSwift.debug.xcconfig */,
+				E8CD3C98306DD5EC1162770A /* Pods-MagistralSwift.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -267,15 +270,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 400BE30A1D51055C00862EEC /* Build configuration list for PBXNativeTarget "MagistralSwift" */;
 			buildPhases = (
-				D536FBD7891802AE9F16B865 /* [CP] Check Pods Manifest.lock */,
-				13346BF33F9BBDA2D0D430A0 /* [CP] Check Pods Manifest.lock */,
+				9E69BDED36F2DF8E121A1AA1 /* [CP] Check Pods Manifest.lock */,
 				400BE2F11D51055C00862EEC /* Sources */,
 				400BE2F21D51055C00862EEC /* Frameworks */,
 				400BE2F31D51055C00862EEC /* Headers */,
 				400BE2F41D51055C00862EEC /* Resources */,
-				740C7CB674C91101797D5530 /* [CP] Copy Pods Resources */,
 				400BE3401D51087D00862EEC /* ShellScript */,
-				72FB96E82152306DD1606186 /* 📦 Copy Pods Resources */,
+				D6C4830C710276CAB2653177 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -367,21 +368,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		13346BF33F9BBDA2D0D430A0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		400BE3401D51087D00862EEC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -391,6 +377,8 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftMQTT.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
 			);
 			outputPaths = (
 			);
@@ -414,37 +402,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
-		72FB96E82152306DD1606186 /* 📦 Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		740C7CB674C91101797D5530 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D536FBD7891802AE9F16B865 /* [CP] Check Pods Manifest.lock */ = {
+		9E69BDED36F2DF8E121A1AA1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -457,6 +415,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D6C4830C710276CAB2653177 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagistralSwift/Pods-MagistralSwift-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -489,6 +462,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40217BB71EBA0E5C0070566F /* ViewController.swift in Sources */,
 				40CF52BC1DF0337D0081A4E7 /* MagistralSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,7 +575,7 @@
 		};
 		400BE30B1D51055C00862EEC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6F6F2592B051C7AAF31A8C15 /* Pods-MagistralSwift.debug.xcconfig */;
+			baseConfigurationReference = 428507ABB402974D40C22D32 /* Pods-MagistralSwift.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = NO;
@@ -632,7 +606,7 @@
 		};
 		400BE30C1D51055C00862EEC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 52D59F550A62F2E0CBF1E605 /* Pods-MagistralSwift.release.xcconfig */;
+			baseConfigurationReference = E8CD3C98306DD5EC1162770A /* Pods-MagistralSwift.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = NO;

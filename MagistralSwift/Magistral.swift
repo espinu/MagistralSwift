@@ -227,11 +227,13 @@ public class Magistral : IMagistral {
         if let dataFromString = msg?.data(using: .utf8, allowLossyConversion: true) {
             
             if JsonConverter.sharedInstance.isValidJSON(data: dataFromString) {
-                
-                let json = JSON(data: dataFromString)
-                let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
-                
-                notifyListeners(topic: m.topic(), channel: m.channel(), messages: messages)
+                do {
+                    let json = try JSON(data: dataFromString)
+                    let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
+                    
+                    notifyListeners(topic: m.topic(), channel: m.channel(), messages: messages)
+                } catch {
+                }
             }
         }
     }
@@ -342,6 +344,7 @@ public class Magistral : IMagistral {
                 callback?(ack, error);
             })
         } else {
+            
             throw MagistralException.mqttConnectionError;
         }
     }
@@ -369,10 +372,6 @@ public class Magistral : IMagistral {
         let ch = (channel < -1) ? -1 : channel;
         
         try self.topics { [weak self] smeta, error in
-            
-            if error != nil {
-                callback?(subMeta, error);
-            }
             
             for meta in smeta {
                 
