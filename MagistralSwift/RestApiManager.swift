@@ -26,14 +26,20 @@ public class RestApiManager {
     
     var manager = Alamofire.SessionManager.default
     var cookies = HTTPCookieStorage.shared
+    fileprivate let initialDate: Date
     
-    static let sharedInstance = RestApiManager()
-    private init() {
+    init() {
+        let initialDate = Date()
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
         configuration.httpCookieStorage = cookies
         manager = Alamofire.SessionManager(configuration: configuration)
         manager.session.configuration.timeoutIntervalForRequest = 180
+
+    }
+    
+    deinit {
+        manager.session.configuration.httpCookieStorage?.removeCookies(since: initialDate)
     }
     
     enum ResponseType {
