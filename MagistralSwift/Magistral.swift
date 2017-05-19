@@ -18,6 +18,7 @@ public class Magistral : IMagistral {
     private var ssl : Bool?;
     
     private var active = false;
+    private var connected = false;
     
     private var host : String = "app.magistral.io";
     
@@ -27,6 +28,8 @@ public class Magistral : IMagistral {
 
     private var init_indexes : [String : [String : [Int : UInt64]]]  = [ : ];
     private var settings : [String : [[String : String]]] = [ : ];
+    
+    private var tokenExp : Int64 = 0;
     
     public typealias Connected = (Bool, Magistral) -> Void
     
@@ -44,6 +47,11 @@ public class Magistral : IMagistral {
         self.cipher = cipher;
     }
     
+    private func currentTimeMillis() -> Int64 {
+        let nowDouble = NSDate().timeIntervalSince1970
+        return Int64(nowDouble * 1000)
+    }
+    
     public required init(pubKey : String, subKey : String, secretKey : String, cipher : String, connected : Connected? ) {
         
         self.pubKey = pubKey;
@@ -54,10 +62,9 @@ public class Magistral : IMagistral {
         
         self.connectionPoints(callback: { [weak self] token, settings in
             self?.settings = settings;
-            
-            self?.initMqtt(token: token, connected: { status, magistral in
+            self?.initMqtt(token: token) { status, magistral in
                 connected?(status, magistral);
-            })
+            }
         });
         
         self.commitTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(commitOffsets), userInfo: nil, repeats: true)
@@ -220,11 +227,13 @@ public class Magistral : IMagistral {
         if let dataFromString = msg?.data(using: .utf8, allowLossyConversion: true) {
             
             if JsonConverter.sharedInstance.isValidJSON(data: dataFromString) {
-                
-                let json = JSON(data: dataFromString)
-                let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
-                
-                notifyListeners(topic: m.topic(), channel: m.channel(), messages: messages)
+                do {
+                    let json = try JSON(data: dataFromString)
+                    let messages = JsonConverter.sharedInstance.mqtt2msg(t: m.topic(), c: m.channel(), ts : m.timestamp(), json: json);
+                    
+                    notifyListeners(topic: m.topic(), channel: m.channel(), messages: messages)
+                } catch {
+                }
             }
         }
     }
@@ -244,7 +253,7 @@ public class Magistral : IMagistral {
         });
         
         mqtt?.connect(completion: { [weak self] mqtt_connected, error in
-            self?.handleMqttConnection(succeed: mqtt_connected, error: error,token : token, connected : connected)
+            self?.handleMqttConnection(succeed: mqtt_connected, error: error, token : token, connected : connected)
         }, disconnect: { [weak self] session in
             self?.handleMqttDisconnect(session: session, token: token, connected: connected)
         }, socketerr: { [weak self] session in
@@ -254,13 +263,29 @@ public class Magistral : IMagistral {
     }
     
     private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+        self.connected = false;
         if (self.active) {
-            print("Connection dropped -> reconnection in 5 sec.")
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-                session.connect(completion: { [weak self] mqtt_connected, error in
-                    self?.handleMqttConnection(succeed: mqtt_connected, error: error, token: token, connected: connected)
+            if (tokenExp == 0 || self.currentTimeMillis() - tokenExp > 300 * 1000) {
+                self.connectionPoints(callback: { [weak self] t, settings in
+                    self?.settings = settings;
+                    self?.tokenExp = (self?.currentTimeMillis())!;
+                    
+                    self?.initMqtt(token: t) { status, magistral in
+                        self?.tryReconnect(delay: 5, session: session, token: t, connected: connected);
+                    }
                 });
+            } else {
+                tryReconnect(delay: 2, session: session, token: token, connected: connected);
             }
+        }
+    }
+    
+    private func tryReconnect(delay: Int, session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+        print("Connection dropped -> reconnection in \(delay) sec.")
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
+            session.connect(completion: { [weak self] mqtt_connected, error in
+                self?.handleMqttConnection(succeed: mqtt_connected, error: error, token: token, connected: connected)
+            });
         }
     }
     
@@ -271,9 +296,12 @@ public class Magistral : IMagistral {
     }
     
     private func handleMqttConnection(succeed: Bool, error: Error, token : String, connected : Connected?) {
+        self.connected = succeed;
+        
         if (succeed) {
             self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
             self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
+            
             self.active = true
             
             for (group, topicSubscription) in self.subscription {
@@ -289,9 +317,8 @@ public class Magistral : IMagistral {
                     }
                 }
             }
-            
-            connected!(self.active, self);
         }
+        connected!(succeed, self);
     }
     
     private func connectionPoints(callback : @escaping (_ token : String, _ settings : [ String : [[String : String]] ]) -> Void) {
@@ -312,9 +339,14 @@ public class Magistral : IMagistral {
     }
     
     public func publish(_ topic : String, channel : Int, msg : [UInt8], callback : io.magistral.client.pub.Callback?) throws {
-        mqtt?.publish(topic, channel: channel, msg: msg, callback: { ack, error in
-            callback?(ack, error);
-        })
+        if self.connected {
+            mqtt?.publish(topic, channel: channel, msg: msg, callback: { ack, error in
+                callback?(ack, error);
+            })
+        } else {
+            
+            throw MagistralException.mqttConnectionError;
+        }
     }
 
 //  SUBSCRIBE
@@ -340,10 +372,6 @@ public class Magistral : IMagistral {
         let ch = (channel < -1) ? -1 : channel;
         
         try self.topics { [weak self] smeta, error in
-            
-            if error != nil {
-                callback?(subMeta, error);
-            }
             
             for meta in smeta {
                 
