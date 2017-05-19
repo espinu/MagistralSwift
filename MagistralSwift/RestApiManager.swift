@@ -39,7 +39,7 @@ public class RestApiManager {
     }
     
     deinit {
-        manager.session.configuration.httpCookieStorage?.removeCookies(since: initialDate)
+        cookies.removeCookies(since: initialDate)
     }
     
     enum ResponseType {
