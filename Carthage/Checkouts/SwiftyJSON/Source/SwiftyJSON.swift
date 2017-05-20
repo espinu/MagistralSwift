@@ -59,21 +59,14 @@ public struct JSON {
      Creates a JSON using the data.
 
      - parameter data:  The NSData used to convert to json.Top level object in data is an NSArray or NSDictionary
-     - parameter opt:   The JSON serialization reading options. `.AllowFragments` by default.
+     - parameter opt:   The JSON serialization reading options. `[]` by default.
      - parameter error: The NSErrorPointer used to return the error. `nil` by default.
 
      - returns: The created JSON
      */
-    public init(data: Data, options opt: JSONSerialization.ReadingOptions = .allowFragments, error: NSErrorPointer = nil) {
-        do {
-            let object: Any = try JSONSerialization.jsonObject(with: data, options: opt)
-            self.init(jsonObject: object)
-        } catch let aError as NSError {
-            if error != nil {
-                error?.pointee = aError
-            }
-            self.init(jsonObject: NSNull())
-        }
+    public init(data: Data, options opt: JSONSerialization.ReadingOptions = []) throws {
+        let object: Any = try JSONSerialization.jsonObject(with: data, options: opt)
+        self.init(jsonObject: object)
     }
 
     /**
@@ -85,7 +78,11 @@ public struct JSON {
     public init(_ object: Any) {
         switch object {
         case let object as Data:
-            self.init(data: object)
+            do {
+                try self.init(data: object)
+            } catch {
+                self.init(jsonObject: NSNull())
+            }
         default:
             self.init(jsonObject: object)
         }
@@ -113,7 +110,7 @@ public struct JSON {
     @available(*, deprecated: 3.2, message: "Use instead `init(parseJSON: )`")
     public static func parse(_ json: String) -> JSON {
         return json.data(using: String.Encoding.utf8)
-            .flatMap { JSON(data: $0) } ?? JSON(NSNull())
+            .flatMap { try? JSON(data: $0) } ?? JSON(NSNull())
     }
 
     /**
@@ -184,7 +181,7 @@ public struct JSON {
     fileprivate var rawBool: Bool = false
     /// Private type
     fileprivate var _type: Type = .null
-    /// prviate error
+    /// Private error
     fileprivate var _error: NSError?
 
     /// Object in JSON
@@ -951,7 +948,7 @@ extension JSON {
             switch self.type {
             case .string:
                 // Check for existing percent escapes first to prevent double-escaping of % character
-                if let _ = self.rawString.range(of: "%[0-9A-Fa-f]{2}", options: .regularExpression, range: nil, locale: nil) {
+                if self.rawString.range(of: "%[0-9A-Fa-f]{2}", options: .regularExpression, range: nil, locale: nil) != nil {
                     return Foundation.URL(string: self.rawString)
                 } else if let encodedString_ = self.rawString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
                     // We have to use `Foundation.URL` otherwise it conflicts with the variable name.

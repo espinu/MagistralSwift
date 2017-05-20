@@ -144,14 +144,14 @@ If you prefer not to use either of the aforementioned dependency managers, you c
 - Open up Terminal, `cd` into your top-level project directory, and run the following command "if" your project is not initialized as a git repository:
 
   ```bash
-$ git init
-```
+  $ git init
+  ```
 
 - Add Alamofire as a git [submodule](http://git-scm.com/docs/git-submodule) by running the following command:
 
   ```bash
-$ git submodule add https://github.com/Alamofire/Alamofire.git
-```
+  $ git submodule add https://github.com/Alamofire/Alamofire.git
+  ```
 
 - Open the new `Alamofire` folder, and drag the `Alamofire.xcodeproj` into the Project Navigator of your application's Xcode project.
 
@@ -243,7 +243,7 @@ func responsePropertyList(
 
 None of the response handlers perform any validation of the `HTTPURLResponse` it gets back from the server.
 
-> For example, response status codes in the `400..<499` and `500..<599` ranges do NOT automatically trigger an `Error`. Alamofire uses [Response Validation](#response-validation) method chaining to achieve this.
+> For example, response status codes in the `400..<500` and `500..<600` ranges do NOT automatically trigger an `Error`. Alamofire uses [Response Validation](#response-validation) method chaining to achieve this.
 
 #### Response Handler
 
@@ -356,7 +356,7 @@ Alamofire.request("https://httpbin.org/get")
 
 #### Automatic Validation
 
-Automatically validates status code within `200...299` range, and that the `Content-Type` header of the response matches the `Accept` header of the request, if one is provided.
+Automatically validates status code within `200..<300` range, and that the `Content-Type` header of the response matches the `Accept` header of the request, if one is provided.
 
 ```swift
 Alamofire.request("https://httpbin.org/get").validate().responseJSON { response in
@@ -491,7 +491,7 @@ struct JSONStringArrayEncoding: ParameterEncoding {
     }
 
     func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
-        var urlRequest = urlRequest.urlRequest
+        var urlRequest = try urlRequest.asURLRequest()
 
         let data = try JSONSerialization.data(withJSONObject: array, options: [])
 
@@ -630,7 +630,7 @@ You can also provide a `DownloadFileDestination` closure to move the file from t
 ```swift
 let destination: DownloadRequest.DownloadFileDestination = { _, _ in
 	let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-	let fileURL = documentsURL.appendPathComponent("pig.png")
+	let fileURL = documentsURL.appendingPathComponent("pig.png")
 
     return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
 }
@@ -647,7 +647,7 @@ Alamofire.download(urlString, to: destination).response { response in
 You can also use the suggested download destination API.
 
 ```swift
-let destination = DownloadRequest.suggestedDownloadDestination(directory: .documentDirectory)
+let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
 Alamofire.download("https://httpbin.org/image/png", to: destination)
 ```
 
@@ -699,7 +699,7 @@ class ImageRequestor {
 
 		let destination: DownloadRequest.DownloadFileDestination = { _, _ in
 			let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-			let fileURL = documentsURL.appendPathComponent("pig.png")
+			let fileURL = documentsURL.appendingPathComponent("pig.png")
 
 		    return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
 		}
@@ -1414,7 +1414,7 @@ func loadUser(completionHandler: @escaping (DataResponse<User>) -> Void) -> Alam
 }
 
 loadUser { response in
-    if let user = userResponse.value {
+    if let user = response.value {
         print("User: { username: \(user.username), name: \(user.name) }")
     }
 }
@@ -1851,4 +1851,4 @@ The community adoption of the ASF libraries has been amazing. We are greatly hum
 
 ## License
 
-Alamofire is released under the MIT license. See LICENSE for details.
+Alamofire is released under the MIT license. [See LICENSE](https://github.com/Alamofire/Alamofire/blob/master/LICENSE) for details.
