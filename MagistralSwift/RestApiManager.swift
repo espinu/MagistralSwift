@@ -25,15 +25,15 @@ public struct MagistralEncoding : ParameterEncoding {
 public class RestApiManager {
     
     var manager = Alamofire.SessionManager.default
-    var cookies = HTTPCookieStorage.shared
+    var cookies = HTTPCookieStorage()
     
-    static let sharedInstance = RestApiManager()
-    private init() {
+    init() {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
         configuration.httpCookieStorage = cookies
         manager = Alamofire.SessionManager(configuration: configuration)
         manager.session.configuration.timeoutIntervalForRequest = 180
+
     }
     
     enum ResponseType {

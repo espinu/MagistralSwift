@@ -51,9 +51,12 @@ public class Magistral : IMagistral {
         let nowDouble = NSDate().timeIntervalSince1970
         return Int64(nowDouble * 1000)
     }
+
+    fileprivate let apiClient: RestApiManager
     
     public required init(pubKey : String, subKey : String, secretKey : String, cipher : String, connected : Connected? ) {
-        
+
+        self.apiClient = RestApiManager()
         self.pubKey = pubKey;
         self.subKey = subKey;
         self.secretKey = secretKey;
@@ -86,7 +89,7 @@ public class Magistral : IMagistral {
     
     private func commit(parameters : Parameters) {
         let baseURL = "https://" + self.host + "/api/magistral/data/commit"
-        RestApiManager.sharedInstance.makeHTTPPostRequest(baseURL, body: parameters, onCompletion: { _,_ in })
+        apiClient.makeHTTPPostRequest(baseURL, body: parameters, onCompletion: { _,_ in })
     }
     
     public func index(_ topic: String, channel: Int, group: String, callback: @escaping io.magistral.client.data.index.Callback) throws {
@@ -100,7 +103,7 @@ public class Magistral : IMagistral {
         
         let user = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let index : io.magistral.client.data.index.TopicChannelIndex = try JsonConverter.sharedInstance.handleIndexes(group : group, json: json);
                 callback(index, err == nil ? nil : MagistralException.indexFetchError);
@@ -122,7 +125,7 @@ public class Magistral : IMagistral {
             "channel": channels
         ]
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { [weak self] json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { [weak self] json, err in
             do {
                 var messages = try JsonConverter.sharedInstance.handleMessageEvent(json: json);
                 
@@ -326,7 +329,7 @@ public class Magistral : IMagistral {
         
         let user = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [:], user: user, password : self.secretKey, onCompletion: { json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: [:], user: user, password : self.secretKey, onCompletion: { json, err in
             let cps : (String, [ String : [[String : String]] ]) = JsonConverter.sharedInstance.connectionPoints(json: json);
             callback(cps.0, cps.1)
         })
@@ -536,7 +539,7 @@ public class Magistral : IMagistral {
         
         let user = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [:], user: user, password : self.secretKey, onCompletion: { json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: [:], user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let permissions : [io.magistral.client.perm.PermMeta] = try JsonConverter.sharedInstance.handle(json: json);
                 callback(permissions, err == nil ? nil : MagistralException.permissionFetchError);
@@ -556,7 +559,7 @@ public class Magistral : IMagistral {
         
         let user = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let permissions : [io.magistral.client.perm.PermMeta] = try JsonConverter.sharedInstance.handle(json: json);
                 callback(permissions, err == nil ? nil : MagistralException.permissionFetchError);
@@ -603,12 +606,12 @@ public class Magistral : IMagistral {
         
         let secretKey = self.secretKey
         let host = self.host
-        RestApiManager.sharedInstance.makeHTTPPutRequestText(baseURL, parameters: params, user: auth, password : secretKey, onCompletion: { text, err in
+        apiClient.makeHTTPPutRequestText(baseURL, parameters: params, user: auth, password : secretKey, onCompletion: { [weak self] text, err in
             if (callback != nil && err == nil) {
                 
                 let baseURL = "https://" + host + "/api/magistral/net/user_permissions"
                 
-                RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
+                self?.apiClient.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
                     do {
                         let permissions : [io.magistral.client.perm.PermMeta] = try JsonConverter.sharedInstance.handle(json: json);
                         callback?(permissions, err == nil ? nil : MagistralException.permissionFetchError);
@@ -639,12 +642,12 @@ public class Magistral : IMagistral {
         let auth = self.pubKey + "|" + self.subKey;
         let host = self.host
         let secretKey = self.secretKey
-        RestApiManager.sharedInstance.makeHTTPDeleteRequestText(baseURL, parameters: params, user: auth, password: secretKey) { text, err in
+        apiClient.makeHTTPDeleteRequestText(baseURL, parameters: params, user: auth, password: secretKey) { [weak self] text, err in
             if (callback != nil && err == nil) {
                 
                 let baseURL = "https://" + host + "/api/magistral/net/user_permissions"
                 
-                RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
+                self?.apiClient.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
                     do {
                         let permissions : [io.magistral.client.perm.PermMeta] = try JsonConverter.sharedInstance.handle(json: json);
                         callback?(permissions, err == nil ? nil : MagistralException.permissionFetchError);
@@ -673,7 +676,7 @@ public class Magistral : IMagistral {
         
         let user = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let history : io.magistral.client.data.History = try JsonConverter.sharedInstance.handle(json: json);
                 callback(history, err == nil ? nil : MagistralException.historyInvocationError);
@@ -701,7 +704,7 @@ public class Magistral : IMagistral {
         
         let user = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let history : io.magistral.client.data.History = try JsonConverter.sharedInstance.handle(json: json);
                 if err == nil {
@@ -732,7 +735,7 @@ public class Magistral : IMagistral {
         
         let user = self.pubKey + "|" + self.subKey;
         
-        RestApiManager.sharedInstance.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
+        apiClient.makeHTTPGetRequest(path: baseURL, parameters: params, user: user, password : self.secretKey, onCompletion: { json, err in
             do {
                 let history : io.magistral.client.data.History = try JsonConverter.sharedInstance.handle(json: json);
                 callback(history, err == nil ? nil : MagistralException.historyInvocationError);
