@@ -21,6 +21,7 @@ public class Magistral : IMagistral {
     private var connected = false;
     
     private var host : String = "app.magistral.io";
+    private var port : Int = 443;
     
     private var mqtt : MqttClient?;
     
@@ -34,7 +35,10 @@ public class Magistral : IMagistral {
     public typealias Connected = (Bool, Magistral) -> Void
     
     convenience init(pubKey : String, subKey : String, secretKey : String, connected : Connected?) {
-        self.init(pubKey : pubKey, subKey : subKey, secretKey : secretKey, cipher : "", connected : connected);
+        self.init(pubKey : pubKey, subKey : subKey, secretKey : secretKey, cipher : "", host: "app.magistral.io", port: 443, connected : connected);
+    }
+    convenience init(pubKey : String, subKey : String, secretKey : String, host : String, port : Int, connected : Connected?) {
+        self.init(pubKey : pubKey, subKey : subKey, secretKey : secretKey, cipher : "", host: host, port: port, connected : connected);
     }
     
     private var commitTimer: Timer!
@@ -54,12 +58,15 @@ public class Magistral : IMagistral {
 
     fileprivate let apiClient: RestApiManager
     
-    public required init(pubKey : String, subKey : String, secretKey : String, cipher : String, connected : Connected? ) {
+    public required init(pubKey : String, subKey : String, secretKey : String, cipher : String, host : String, port : Int, connected : Connected? ) {
 
         self.apiClient = RestApiManager()
         self.pubKey = pubKey;
         self.subKey = subKey;
         self.secretKey = secretKey;
+        
+        self.host = host;
+        self.port = port;
         
         if (cipher != "") { self.cipher = cipher; }
         
@@ -88,13 +95,13 @@ public class Magistral : IMagistral {
     }
     
     private func commit(parameters : Parameters) {
-        let baseURL = "https://" + self.host + "/api/magistral/data/commit"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/data/commit"
         apiClient.makeHTTPPostRequest(baseURL, body: parameters, onCompletion: { _,_ in })
     }
     
     public func index(_ topic: String, channel: Int, group: String, callback: @escaping io.magistral.client.data.index.Callback) throws {
         
-        let baseURL = "https://" + self.host + "/api/magistral/data/index"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/data/index"
         
         var params : Parameters = [ : ]
         params["topic"] = topic;
@@ -115,7 +122,7 @@ public class Magistral : IMagistral {
     }
     
     private func read(_ topic : String, group : String, channels : [Int], listener : @escaping io.magistral.client.sub.NetworkListener, callback: @escaping () -> Void) {
-        let baseURL = "https://" + self.host + "/api/magistral/data/read"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/data/read"
         
         let user = self.pubKey + "|" + self.subKey;
         
@@ -273,12 +280,10 @@ public class Magistral : IMagistral {
                     self?.settings = settings;
                     self?.tokenExp = (self?.currentTimeMillis())!;
                     
-                    self?.initMqtt(token: t) { status, magistral in
-                        self?.tryReconnect(delay: 5, session: session, token: t, connected: connected);
-                    }
+                    self?.tryReconnect(delay: 5, session: session, token: t, connected: nil);
                 });
             } else {
-                tryReconnect(delay: 2, session: session, token: token, connected: connected);
+                tryReconnect(delay: 5, session: session, token: token, connected: nil);
             }
         }
     }
@@ -321,11 +326,14 @@ public class Magistral : IMagistral {
                 }
             }
         }
-        connected!(succeed, self);
+        
+        if connected != nil {
+            connected!(succeed, self);
+        }
     }
     
     private func connectionPoints(callback : @escaping (_ token : String, _ settings : [ String : [[String : String]] ]) -> Void) {
-        let baseURL = "https://" + self.host + "/api/magistral/net/connectionPoints"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/net/connectionPoints"
         
         let user = self.pubKey + "|" + self.subKey;
         
@@ -535,7 +543,7 @@ public class Magistral : IMagistral {
     // ACCESS CONTROL
     
     public func permissions(_ callback : @escaping io.magistral.client.perm.Callback) throws {
-        let baseURL = "https://" + self.host + "/api/magistral/net/permissions"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/net/permissions"
         
         let user = self.pubKey + "|" + self.subKey;
         
@@ -552,7 +560,7 @@ public class Magistral : IMagistral {
     }
     
     public func permissions(_ topic: String, callback : @escaping io.magistral.client.perm.Callback) throws {
-        let baseURL = "https://" + self.host + "/api/magistral/net/permissions"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/net/permissions"
         
         var params : Parameters = [ : ]
         params["topic"] = topic;
@@ -585,7 +593,7 @@ public class Magistral : IMagistral {
     
     public func grant(_ user: String, topic: String, channel: Int, read: Bool, write: Bool, ttl: Int, callback : io.magistral.client.perm.Callback?) throws {
         
-        let baseURL = "https://" + self.host + "/api/magistral/net/grant"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/net/grant"
         
         var params : Parameters = [ : ]
         params["user"] = user;
@@ -605,11 +613,13 @@ public class Magistral : IMagistral {
         let auth = self.pubKey + "|" + self.subKey;
         
         let secretKey = self.secretKey
-        let host = self.host
+        
+        let host = self.host; let port = String(self.port)
+        
         apiClient.makeHTTPPutRequestText(baseURL, parameters: params, user: auth, password : secretKey, onCompletion: { [weak self] text, err in
             if (callback != nil && err == nil) {
                 
-                let baseURL = "https://" + host + "/api/magistral/net/user_permissions"
+                let baseURL = "https://" + host + ":" + port + "/api/magistral/net/user_permissions"
                 
                 self?.apiClient.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
                     do {
@@ -629,7 +639,7 @@ public class Magistral : IMagistral {
     }
 
     public func revoke(_ user: String, topic: String, channel: Int, callback : io.magistral.client.perm.Callback?) throws {
-        let baseURL = "https://" + self.host + "/api/magistral/net/revoke"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/net/revoke"
         
         var params : Parameters = [ : ]
         params["user"] = user;
@@ -640,12 +650,13 @@ public class Magistral : IMagistral {
         }
         
         let auth = self.pubKey + "|" + self.subKey;
-        let host = self.host
+        let host = self.host; let port = String(self.port)
+        
         let secretKey = self.secretKey
         apiClient.makeHTTPDeleteRequestText(baseURL, parameters: params, user: auth, password: secretKey) { [weak self] text, err in
             if (callback != nil && err == nil) {
                 
-                let baseURL = "https://" + host + "/api/magistral/net/user_permissions"
+                let baseURL = "https://" + host + ":" + port + "/api/magistral/net/user_permissions"
                 
                 self?.apiClient.makeHTTPGetRequest(path: baseURL, parameters: [ "userName" : user], user: auth, password : secretKey, onCompletion: { json, err in
                     do {
@@ -665,7 +676,7 @@ public class Magistral : IMagistral {
     }
     
     public func history(_ topic: String, channel: Int, startingIndex: Int, count: Int, callback: @escaping io.magistral.client.data.Callback) throws {
-        let baseURL = "https://" + self.host + "/api/magistral/data/historyPage"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/data/historyPage"
         
         var params : Parameters = [ : ]
         
@@ -690,7 +701,7 @@ public class Magistral : IMagistral {
     }
     
     public func history(_ topic: String, channel: Int, start: UInt64, count: Int, callback : @escaping io.magistral.client.data.Callback) throws {
-        let baseURL = "https://" + self.host + "/api/magistral/data/history"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/data/history"
         
         var params : Parameters = [ : ]
         
@@ -723,7 +734,7 @@ public class Magistral : IMagistral {
     }
     
     public func history(_ topic: String, channel: Int, start: UInt64, end: UInt64, callback : @escaping io.magistral.client.data.Callback) throws {
-        let baseURL = "https://" + self.host + "/api/magistral/data/historyForPeriod"
+        let baseURL = "https://" + self.host + ":" + String(self.port) + "/api/magistral/data/historyForPeriod"
         
         var params : Parameters = [ : ]
         

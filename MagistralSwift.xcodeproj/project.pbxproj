@@ -23,7 +23,6 @@
 		400BE32D1D5105A800862EEC /* sub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400BE3201D5105A800862EEC /* sub.swift */; };
 		400BE33A1D5107E600862EEC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BE32E1D5107D300862EEC /* Alamofire.framework */; };
 		40137B601D912DFE00A88D6B /* SwiftMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405600B81D90ACE000A57037 /* SwiftMQTT.framework */; };
-		40217BB71EBA0E5C0070566F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40217BB61EBA0E5C0070566F /* ViewController.swift */; };
 		40259EEA1D51CCED004F711F /* perm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40259EE91D51CCED004F711F /* perm.swift */; };
 		405600BD1D90AF1400A57037 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405600BC1D90AF1400A57037 /* main.swift */; };
 		406F25871D91739800F4D65F /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406F25851D91735200F4D65F /* SwiftyJSON.framework */; };
@@ -69,7 +68,6 @@
 		400BE31F1D5105A800862EEC /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		400BE3201D5105A800862EEC /* sub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sub.swift; sourceTree = "<group>"; };
 		400BE32E1D5107D300862EEC /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		40217BB61EBA0E5C0070566F /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		40259EE91D51CCED004F711F /* perm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = perm.swift; sourceTree = "<group>"; };
 		405600B81D90ACE000A57037 /* SwiftMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftMQTT.framework; path = Carthage/Build/iOS/SwiftMQTT.framework; sourceTree = "<group>"; };
 		405600BC1D90AF1400A57037 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -165,7 +163,6 @@
 		400BE3041D51055C00862EEC /* MagistralSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				40217BB61EBA0E5C0070566F /* ViewController.swift */,
 				400BE3071D51055C00862EEC /* Info.plist */,
 				40CF52BB1DF0337D0081A4E7 /* MagistralSwiftTests.swift */,
 			);
@@ -462,7 +459,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40217BB71EBA0E5C0070566F /* ViewController.swift in Sources */,
 				40CF52BC1DF0337D0081A4E7 /* MagistralSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
