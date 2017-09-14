@@ -13,12 +13,14 @@ import SwiftyJSON
 import Alamofire
 
 public class Magistral : IMagistral {
-    
+    private let maximalDelayTime = 10;
     private var pubKey : String, subKey : String, secretKey : String, cipher : String?;
     private var ssl : Bool?;
     
     private var active = false;
     private var connected = false;
+    private var isTryingToReconnect = false
+    private var delayToReconnect = 0
     
     private var host : String = "app.magistral.io";
     private var port : Int = 443;
@@ -267,31 +269,40 @@ public class Magistral : IMagistral {
         }, disconnect: { [weak self] session in
             self?.handleMqttDisconnect(session: session, token: token, connected: connected)
         }, socketerr: { [weak self] session in
-            self?.handleMqttSocketError()
+            self?.handleMqttDisconnect(session: session, token: token, connected: connected)
         })
         
     }
     
     private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
         self.connected = false;
-        if (self.active) {
-            if (tokenExp == 0 || self.currentTimeMillis() - tokenExp > 300 * 1000) {
-                self.connectionPoints(callback: { [weak self] t, settings in
-                    self?.settings = settings;
-                    self?.tokenExp = (self?.currentTimeMillis())!;
-                    
-                    self?.tryReconnect(delay: 5, session: session, token: t, connected: nil);
-                });
-            } else {
-                tryReconnect(delay: 5, session: session, token: token, connected: nil);
-            }
+        if (!self.active) {
+            return
+        }
+        if (tokenExp == 0 || self.currentTimeMillis() - tokenExp > 300 * 1000) {
+            self.connectionPoints(callback: { [weak self] t, settings in
+                self?.settings = settings;
+                self?.tokenExp = (self?.currentTimeMillis())!;
+                
+                self?.tryReconnect(delay: self?.delayToReconnect ?? 0, session: session, token: t, connected: nil);
+            });
+        } else {
+            tryReconnect(delay: delayToReconnect, session: session, token: token, connected: nil);
         }
     }
     
     private func tryReconnect(delay: Int, session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+        if isTryingToReconnect {
+            return
+        }
+        if delayToReconnect < maximalDelayTime {
+            delayToReconnect += 1
+        }
+        isTryingToReconnect = true
         print("Connection dropped -> reconnection in \(delay) sec.")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
             session.connect(completion: { [weak self] mqtt_connected, error in
+                self?.isTryingToReconnect = false
                 self?.handleMqttConnection(succeed: mqtt_connected, error: error, token: token, connected: connected)
             });
         }
@@ -307,6 +318,7 @@ public class Magistral : IMagistral {
         self.connected = succeed;
         
         if (succeed) {
+            delayToReconnect = 0
             self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
             self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
             
