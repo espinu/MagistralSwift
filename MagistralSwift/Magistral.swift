@@ -11,6 +11,12 @@ import Foundation
 import SwiftMQTT
 import SwiftyJSON
 import Alamofire
+    
+public enum ConnectionStatus {
+    case connected
+    case tryingToConnect
+    case disconnected
+}
 
 public class Magistral : IMagistral {
     private let maximalDelayTime = 10;
@@ -34,12 +40,12 @@ public class Magistral : IMagistral {
     
     private var tokenExp : Int64 = 0;
     
-    public typealias Connected = (Bool, Magistral) -> Void
+    public typealias Connected = (ConnectionStatus, Magistral) -> Void
     
-    convenience init(pubKey : String, subKey : String, secretKey : String, connected : Connected?) {
+    convenience init(pubKey : String, subKey : String, secretKey : String, connected : @escaping Connected) {
         self.init(pubKey : pubKey, subKey : subKey, secretKey : secretKey, cipher : "", host: "app.magistral.io", port: 443, connected : connected);
     }
-    convenience init(pubKey : String, subKey : String, secretKey : String, host : String, port : Int, connected : Connected?) {
+    convenience init(pubKey : String, subKey : String, secretKey : String, host : String, port : Int, connected : @escaping Connected) {
         self.init(pubKey : pubKey, subKey : subKey, secretKey : secretKey, cipher : "", host: host, port: port, connected : connected);
     }
     
@@ -60,7 +66,7 @@ public class Magistral : IMagistral {
 
     fileprivate let apiClient: RestApiManager
     
-    public required init(pubKey : String, subKey : String, secretKey : String, cipher : String, host : String, port : Int, connected : Connected? ) {
+    public required init(pubKey : String, subKey : String, secretKey : String, cipher : String, host : String, port : Int, connected : @escaping Connected ) {
 
         self.apiClient = RestApiManager()
         self.pubKey = pubKey;
@@ -75,7 +81,7 @@ public class Magistral : IMagistral {
         self.connectionPoints(callback: { [weak self] token, settings in
             self?.settings = settings;
             self?.initMqtt(token: token) { status, magistral in
-                connected?(status, magistral);
+                connected(status, magistral);
             }
         });
         
@@ -250,7 +256,7 @@ public class Magistral : IMagistral {
         }
     }
     
-    private func initMqtt(token : String, connected : Connected?) {
+    private func initMqtt(token : String, connected : @escaping Connected) {
         
         mqtt = MqttClient(host: self.host, port: 8883, clientID: "magistral.mqtt.gw." + token, cleanSession: true, keepAlive: 30, useSSL: true)
         
@@ -274,9 +280,10 @@ public class Magistral : IMagistral {
         
     }
     
-    private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+    private func handleMqttDisconnect(session: SwiftMQTT.MQTTSession, token : String, connected : @escaping Connected) {
         self.connected = false;
         if (!self.active) {
+            connected(.disconnected, self)
             return
         }
         if (tokenExp == 0 || self.currentTimeMillis() - tokenExp > 300 * 1000) {
@@ -284,20 +291,21 @@ public class Magistral : IMagistral {
                 self?.settings = settings;
                 self?.tokenExp = (self?.currentTimeMillis())!;
                 
-                self?.tryReconnect(delay: self?.delayToReconnect ?? 0, session: session, token: t, connected: nil);
+                self?.tryReconnect(delay: self?.delayToReconnect ?? 0, session: session, token: t, connected: connected);
             });
         } else {
-            tryReconnect(delay: delayToReconnect, session: session, token: token, connected: nil);
+            tryReconnect(delay: delayToReconnect, session: session, token: token, connected: connected);
         }
     }
     
-    private func tryReconnect(delay: Int, session: SwiftMQTT.MQTTSession, token : String, connected : Connected?) {
+    private func tryReconnect(delay: Int, session: SwiftMQTT.MQTTSession, token : String, connected : @escaping Connected) {
         if isTryingToReconnect {
             return
         }
         if delayToReconnect < maximalDelayTime {
             delayToReconnect += 1
         }
+        connected(.tryingToConnect, self)
         isTryingToReconnect = true
         print("Connection dropped -> reconnection in \(delay) sec.")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delay)) {
@@ -314,34 +322,33 @@ public class Magistral : IMagistral {
         }
     }
     
-    private func handleMqttConnection(succeed: Bool, error: Error, token : String, connected : Connected?) {
+    private func handleMqttConnection(succeed: Bool, error: Error, token : String, connected : Connected) {
         self.connected = succeed;
         
-        if (succeed) {
-            delayToReconnect = 0
-            self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
-            self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
-            
-            self.active = true
-            
-            for (group, topicSubscription) in self.subscription {
-                for (t, channelsSubscription) in topicSubscription {
-                    if let listenerGroups = self.lstMap[t] {
-                        if let groupListener = listenerGroups[group] {
-                            self.read(t, group: group, channels: channelsSubscription, listener: groupListener, callback: {});
-                        }
+        if (!succeed) {
+            connected(.disconnected, self);
+            return
+        }
+        delayToReconnect = 0
+        self.mqtt?.subscribe(to: "exceptions", delivering: .atLeastOnce, completion: nil)
+        self.mqtt?.publish(Data([1]), in: "presence/" + self.pubKey + "/" + token, delivering: .atLeastOnce, retain: true, completion: nil)
+        
+        self.active = true
+        
+        for (group, topicSubscription) in self.subscription {
+            for (t, channelsSubscription) in topicSubscription {
+                if let listenerGroups = self.lstMap[t] {
+                    if let groupListener = listenerGroups[group] {
+                        self.read(t, group: group, channels: channelsSubscription, listener: groupListener, callback: {});
                     }
-                    
-                    for ch in channelsSubscription {
-                        self.mqtt?.subscribe(t, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in });
-                    }
+                }
+                
+                for ch in channelsSubscription {
+                    self.mqtt?.subscribe(t, channel: ch, group: group, qos: .atLeastOnce, callback : { meta, err in });
                 }
             }
         }
-        
-        if connected != nil {
-            connected!(succeed, self);
-        }
+        connected(.connected, self);
     }
     
     private func connectionPoints(callback : @escaping (_ token : String, _ settings : [ String : [[String : String]] ]) -> Void) {
